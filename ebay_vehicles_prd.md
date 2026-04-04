@@ -333,24 +333,24 @@ Plain-language price analysis comparing the listing against market average for t
 ### Stage 3: Due Diligence
 
 
-| ID    | Requirement                                                                              | Priority |
-| ----- | ---------------------------------------------------------------------------------------- | -------- |
-| VD-01 | Sticky summary panel must be visible on page load without scrolling                      | P0       |
-| VD-02 | Photo gallery must support swipe (mobile) and keyboard nav (desktop)                     | P0       |
-| VD-03 | All vehicle specs must be in a structured table, not prose                               | P0       |
-| VD-04 | Price must be shown with market context ("$X below market average")                      | P0       |
-| VD-05 | Seller feedback score must be prominently displayed                                      | P1       |
-| VD-06 | Page must be shareable via URL — state in route, not session                             | P1       |
-| AI-01 | AI panel must call OpenAI API on first expand; response cached server-side by listing ID  | P0       |
-| AI-02 | API call must be server-side — key never exposed to client                               | P0       |
-| AI-03 | Panel must stream on first uncached open, with loading state only until content begins   | P0       |
-| AI-04 | Panel must handle API errors gracefully — no broken UI                                   | P0       |
-| AI-05 | Section order: (1) Known Issues, (2) Price Verdict, (3) Questions to Ask                 | P0       |
-| AI-06 | Price analysis must output one of three verdicts: Below Market / Fair / Above Market     | P0       |
-| AI-07 | Known issues must include disclaimer: AI-generated, not a vehicle inspection             | P1       |
-| AI-08 | Seller questions must be specific to the listing — not generic boilerplate               | P1       |
-| AI-09 | Cached responses must be served instantly on subsequent opens in the same running instance | P1      |
-| AI-10 | When a search query is present, the AI output must reflect that buyer intent lightly but visibly | P1 |
+| ID    | Requirement                                                                                      | Priority |
+| ----- | ------------------------------------------------------------------------------------------------ | -------- |
+| VD-01 | Sticky summary panel must be visible on page load without scrolling                              | P0       |
+| VD-02 | Photo gallery must support swipe (mobile) and keyboard nav (desktop)                             | P0       |
+| VD-03 | All vehicle specs must be in a structured table, not prose                                       | P0       |
+| VD-04 | Price must be shown with market context ("$X below market average")                              | P0       |
+| VD-05 | Seller feedback score must be prominently displayed                                              | P1       |
+| VD-06 | Page must be shareable via URL — state in route, not session                                     | P1       |
+| AI-01 | AI panel must call OpenAI API on first expand; response cached server-side by listing ID         | P0       |
+| AI-02 | API call must be server-side — key never exposed to client                                       | P0       |
+| AI-03 | Panel must stream on first uncached open, with loading state only until content begins           | P0       |
+| AI-04 | Panel must handle API errors gracefully — no broken UI                                           | P0       |
+| AI-05 | Section order: (1) Known Issues, (2) Price Verdict, (3) Questions to Ask                         | P0       |
+| AI-06 | Price analysis must output one of three verdicts: Below Market / Fair / Above Market             | P0       |
+| AI-07 | Known issues must include disclaimer: AI-generated, not a vehicle inspection                     | P1       |
+| AI-08 | Seller questions must be specific to the listing — not generic boilerplate                       | P1       |
+| AI-09 | Cached responses must be served instantly on subsequent opens in the same running instance       | P1       |
+| AI-10 | When a search query is present, the AI output must reflect that buyer intent lightly but visibly | P1       |
 
 
 ### Stage 4: Commitment
@@ -368,14 +368,14 @@ Plain-language price analysis comparing the listing against market average for t
 ## 9. Non-Functional Requirements
 
 
-| Requirement    | Detail                                                                                |
-| -------------- | ------------------------------------------------------------------------------------- |
-| Performance    | Core Web Vitals: LCP < 2.5s, CLS < 0.1, FID < 100ms on 4G mobile                      |
-| Accessibility  | WCAG 2.1 AA: keyboard navigable, screen reader compatible, sufficient colour contrast |
-| Responsiveness | Fully functional on mobile (375px+), tablet (768px+), desktop (1280px+)               |
-| Security       | OpenAI API key stored server-side only, never in client bundle or network requests    |
+| Requirement    | Detail                                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Performance    | Core Web Vitals: LCP < 2.5s, CLS < 0.1, FID < 100ms on 4G mobile                                                   |
+| Accessibility  | WCAG 2.1 AA: keyboard navigable, screen reader compatible, sufficient colour contrast                              |
+| Responsiveness | Fully functional on mobile (375px+), tablet (768px+), desktop (1280px+)                                            |
+| Security       | OpenAI API key stored server-side only, never in client bundle or network requests                                 |
 | Data           | Mock data layer should cover both buyer personas: needs-first chip journeys and model-specific comparison journeys |
-| Environment    | `OPENAI_API_KEY` stored in the repo-root `.env` file                                  |
+| Environment    | `OPENAI_API_KEY` stored in the repo-root `.env` file                                                               |
 
 
 ---
@@ -385,14 +385,14 @@ Plain-language price analysis comparing the listing against market average for t
 ### 10.1 Stack
 
 
-| Layer                | Technology                                                     |
-| -------------------- | -------------------------------------------------------------- |
-| Framework            | SvelteKit (SSR for results/detail pages)                       |
-| UI Components        | shadcn-svelte (bits-ui v2)                                     |
-| Styling              | Tailwind CSS                                                   |
-| AI                   | OpenAI API (`gpt-5.4-mini`) — server-side only                 |
-| Data                 | Mock layer tailored to the two buyer personas and search-entry patterns |
-| Deployment           | Vercel (adapter-vercel)                                        |
+| Layer         | Technology                                                              |
+| ------------- | ----------------------------------------------------------------------- |
+| Framework     | SvelteKit (SSR for results/detail pages)                                |
+| UI Components | shadcn-svelte (bits-ui v2)                                              |
+| Styling       | Tailwind CSS                                                            |
+| AI            | OpenAI API (`gpt-5.4-mini`) — server-side only                          |
+| Data          | Mock layer tailored to the two buyer personas and search-entry patterns |
+| Deployment    | Vercel (adapter-vercel)                                                 |
 
 
 ### 10.2 Data Layer
@@ -457,7 +457,7 @@ routes/api/
 
 | When               | Deliverable                                                                      |
 | ------------------ | -------------------------------------------------------------------------------- |
-| Saturday AM        | Scaffold: SvelteKit + shadcn-svelte + Tailwind, persona-aligned mock data layer   |
+| Saturday AM        | Scaffold: SvelteKit + shadcn-svelte + Tailwind, persona-aligned mock data layer  |
 | Saturday PM        | Homepage (guided selector) + Results page (cards + badges + filters)             |
 | Sunday AM          | Vehicle Detail page: gallery, spec table, sticky summary panel                   |
 | Sunday PM          | AI Confidence Panel: OpenAI API, streaming, loading/error states + Contact modal |
@@ -496,3 +496,4 @@ routes/api/
 - Define a clear A/B test: search + confidence layer vs. current eBay Vehicles experience
 - V2 investment: stronger personalization and memory beyond the current lightweight search-query-aware analysis
 - Align with the Selling team — better buyer confidence signals could directly improve seller listing quality and description completeness
+
