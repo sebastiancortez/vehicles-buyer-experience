@@ -1,1 +1,135 @@
 @import 'tailwindcss';
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+/* ─── Design System — "Clean Commerce" ─────────────────────────────────── */
+/* Inspired by Shop (Shopify): clean, warm, trustworthy.                    */
+/* Single font, cool-warm neutrals, sage green primary, generous radii.     */
+
+@theme {
+	/* Typography */
+	--font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+	/* ─── shadcn-svelte semantic tokens ─── */
+	--color-background: oklch(98.5% 0.003 260);
+	--color-foreground: oklch(15% 0.01 260);
+
+	--color-card: oklch(100% 0 0);
+	--color-card-foreground: oklch(15% 0.01 260);
+
+	--color-popover: oklch(100% 0 0);
+	--color-popover-foreground: oklch(15% 0.01 260);
+
+	--color-primary: oklch(48% 0.115 160);
+	--color-primary-foreground: oklch(98% 0.005 160);
+
+	--color-secondary: oklch(96% 0.004 260);
+	--color-secondary-foreground: oklch(25% 0.01 260);
+
+	--color-muted: oklch(96% 0.004 260);
+	--color-muted-foreground: oklch(55% 0.008 260);
+
+	--color-accent: oklch(96% 0.004 260);
+	--color-accent-foreground: oklch(25% 0.01 260);
+
+	--color-destructive: oklch(55% 0.2 25);
+
+	--color-border: oklch(92% 0.004 260);
+	--color-input: oklch(92% 0.004 260);
+	--color-ring: oklch(48% 0.115 160);
+
+	/* ─── Extended palette ─── */
+	--color-surface: oklch(100% 0 0);
+	--color-surface-raised: oklch(100% 0 0);
+	--color-text: oklch(15% 0.01 260);
+	--color-text-secondary: oklch(48% 0.008 260);
+	--color-text-tertiary: oklch(62% 0.006 260);
+	--color-border-hover: oklch(84% 0.008 260);
+	--color-primary-light: oklch(96% 0.025 160);
+
+	/* ─── Signal colors (semantic) ─── */
+	--color-signal-below: oklch(52% 0.1 155);
+	--color-signal-below-bg: oklch(96% 0.025 155);
+	--color-signal-below-text: oklch(36% 0.08 155);
+	--color-signal-fair: oklch(62% 0.1 80);
+	--color-signal-fair-bg: oklch(96.5% 0.02 80);
+	--color-signal-fair-text: oklch(40% 0.08 80);
+	--color-signal-above: oklch(58% 0.15 28);
+	--color-signal-above-bg: oklch(96.5% 0.025 28);
+	--color-signal-above-text: oklch(40% 0.1 28);
+	--color-signal-low: oklch(52% 0.1 155);
+	--color-signal-low-bg: oklch(96% 0.025 155);
+	--color-signal-low-text: oklch(36% 0.08 155);
+	--color-signal-average: oklch(62% 0.1 80);
+	--color-signal-average-bg: oklch(96.5% 0.02 80);
+	--color-signal-average-text: oklch(40% 0.08 80);
+	--color-signal-high: oklch(58% 0.15 28);
+	--color-signal-high-bg: oklch(96.5% 0.025 28);
+	--color-signal-high-text: oklch(40% 0.1 28);
+
+	/* ─── Radii — generous, rounded ─── */
+	--radius-sm: 0.375rem;
+	--radius-md: 0.625rem;
+	--radius-lg: 0.875rem;
+	--radius-xl: 1rem;
+	--radius-2xl: 1.25rem;
+	--radius-full: 9999px;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: var(--font-sans);
+	background-color: var(--color-background);
+	color: var(--color-foreground);
+	line-height: 1.6;
+	font-weight: 400;
+}
+
+/* ─── Utilities ─────────────────────────────────────────────────────────── */
+
+.tabular-nums {
+	font-variant-numeric: tabular-nums;
+}
+
+/* ─── Focus ─────────────────────────────────────────────────────────────── */
+
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-border-hover);
+}

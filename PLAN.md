@@ -21,8 +21,9 @@ Do this so the next agent does not repeat completed work and has context for fol
 1. **Check off acceptance criteria** — In that slice only, change every `- [ ]` under **Acceptance criteria** to `- [x]` for items that are truly done. Leave unchecked items that still need work (or split follow-up work into a note in the Development log).
 2. **Update slice status** — In the slice’s **Status** table row, set **Status** to `Done` when all acceptance criteria for that slice are checked.
 3. **Append to [Development log](#development-log)** — Add one bullet under that slice’s subsection with:
-   - **Date** (ISO `YYYY-MM-DD`)
-   - **One short paragraph** (or 3–6 bullets) summarising what was implemented, key files or routes touched, and any caveats, env vars, or follow-ups for the next agent.
+
+- **Date** (ISO `YYYY-MM-DD`)
+- **One short paragraph** (or 3–6 bullets) summarising what was implemented, key files or routes touched, and any caveats, env vars, or follow-ups for the next agent.
 
 ### If something is only partially done
 
@@ -52,26 +53,26 @@ Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete.
 
 ## Conventions
 
-| Convention | Detail |
-|---|---|
-| **UI Library** | shadcn-svelte (bits-ui v2) — install via CLI, use as primary component library |
-| **Custom UI** | Only when shadcn-svelte doesn't cover it; prefer extending over building from scratch |
-| **Design Skill** | Apply the `/frontend-design` skill for visual direction — distinctive typography, color palette, spatial composition. Avoid generic AI aesthetics. |
-| **Svelte** | Svelte 5 runes mode (`$state`, `$derived`, `$effect`, `$props`) — enforced project-wide |
-| **Styling** | Tailwind CSS v4 via `@tailwindcss/vite` plugin |
-| **Data** | Mock data with hardcoded values; no computation engines for badges or rankings |
-| **AI** | Claude API, server-side only, cached per listing ID |
-| **Package Manager** | pnpm |
-| **MCP** | Use the Svelte MCP server (`list-sections`, `get-documentation`, `svelte-autofixer`) when writing Svelte code |
+| Convention          | Detail                                                                                                                                             |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **UI Library**      | shadcn-svelte (bits-ui v2) — install via CLI, use as primary component libraryUse /shadcn-svelte skill                                             |
+| **Custom UI**       | Only when shadcn-svelte doesn't cover it; prefer extending over building from scratch                                                              |
+| **Design Skill**    | Apply the `/frontend-design` skill for visual direction — distinctive typography, color palette, spatial composition. Avoid generic AI aesthetics. |
+| **Svelte**          | Svelte 5 runes mode (`$state`, `$derived`, `$effect`, `$props`) — enforced project-wide                                                            |
+| **Styling**         | Tailwind CSS v4 via `@tailwindcss/vite` plugin                                                                                                     |
+| **Data**            | Mock data with hardcoded values; no computation engines for badges or rankings                                                                     |
+| **AI**              | Claude API, server-side only, cached per listing ID                                                                                                |
+| **Package Manager** | pnpm                                                                                                                                               |
+| **MCP**             | Use the Svelte MCP server (`list-sections`, `get-documentation`, `svelte-autofixer`) when writing Svelte code                                      |
 
 ---
 
 ## Slice 1 — Foundation: Mock data, types, shadcn-svelte, layout shell
 
-| | |
-|---|---|
+|                |                      |
+| -------------- | -------------------- |
 | **Blocked by** | Nothing — start here |
-| **Status** | Not started |
+| **Status**     | Done                 |
 
 ### What to build
 
@@ -120,14 +121,14 @@ src/routes/
 
 ### Acceptance criteria
 
-- [ ] `pnpm dev` starts without errors
-- [ ] shadcn-svelte components are installed and importable
-- [ ] TypeScript types compile cleanly
-- [ ] `mock.ts` exports 20 listings with varied data
-- [ ] `ListingCard` renders a card with photo, details, and badges
-- [ ] `SignalBadge` renders all 6 badge variants (3 price + 3 mileage)
-- [ ] Layout shell renders nav + content slot on all breakpoints
-- [ ] API toggle returns mock data when `USE_MOCK_API=true`
+- [x] `pnpm dev` starts without errors
+- [x] shadcn-svelte components are installed and importable
+- [x] TypeScript types compile cleanly
+- [x] `mock.ts` exports 20 listings with varied data
+- [x] `ListingCard` renders a card with photo, details, and badges
+- [x] `SignalBadge` renders all 6 badge variants (3 price + 3 mileage)
+- [x] Layout shell renders nav + content slot on all breakpoints
+- [x] API toggle returns mock data when `USE_MOCK_API=true`
 
 ### PRD requirements covered
 
@@ -137,10 +138,10 @@ None directly — this is scaffolding. All subsequent slices depend on it.
 
 ## Slice 2 — Homepage: Search bar + shortcut chips + trending listings
 
-| | |
-|---|---|
-| **Blocked by** | Slice 1 |
-| **Status** | Not started |
+|                |             |
+| -------------- | ----------- |
+| **Blocked by** | Slice 1     |
+| **Status**     | Not started |
 
 ### What to build
 
@@ -148,14 +149,14 @@ The homepage as a destination — search bar for intent-driven buyers, shortcut 
 
 ### Scope
 
-- **`SearchBar.svelte`** in `src/lib/components/`:
+- `**SearchBar.svelte`\*\* in `src/lib/components/`:
   - Full-width text input, prominent placement
   - "Search Vehicles" CTA button
   - On submit, navigates to `/vehicles?q={query}`
 - **Shortcut chips** below search bar:
   - 4–5 hardcoded need-based queries: "Reliable under $15k", "Low mileage sedans", "Family SUVs", "First car under $10k", "Trucks under $20k"
   - Tap to navigate to `/vehicles?q={chip text}`
-- **`TrendingListings.svelte`** in `src/lib/components/`:
+- `**TrendingListings.svelte`\*\* in `src/lib/components/`:
   - Fetches listings sorted by `watcherCount + saveCount` (descending)
   - Renders as a horizontal row or grid of `ListingCard` components
   - Cards show watcher count as social proof ("47 watching")
@@ -177,13 +178,13 @@ src/routes/
 
 ### Acceptance criteria
 
-- [ ] Search bar is the primary, prominent element on the homepage
-- [ ] Typing a query and pressing Search navigates to `/vehicles?q=...`
-- [ ] Shortcut chips are visible below the search bar
-- [ ] Tapping a chip navigates to `/vehicles?q={chip text}`
-- [ ] Trending listings row renders below shortcuts, sorted by watcher + save count
-- [ ] Listing cards in trending row show watcher count
-- [ ] Homepage is responsive: mobile (375px+), tablet (768px+), desktop (1280px+)
+- Search bar is the primary, prominent element on the homepage
+- Typing a query and pressing Search navigates to `/vehicles?q=...`
+- Shortcut chips are visible below the search bar
+- Tapping a chip navigates to `/vehicles?q={chip text}`
+- Trending listings row renders below shortcuts, sorted by watcher + save count
+- Listing cards in trending row show watcher count
+- Homepage is responsive: mobile (375px+), tablet (768px+), desktop (1280px+)
 
 ### PRD requirements covered
 
@@ -193,10 +194,10 @@ VS-01, VS-02, VS-03, VS-04, VS-05, VS-06
 
 ## Slice 3 — Results Page: Listing grid + badges + filters + sort
 
-| | |
-|---|---|
-| **Blocked by** | Slice 1 |
-| **Status** | Not started |
+|                |             |
+| -------------- | ----------- |
+| **Blocked by** | Slice 1     |
+| **Status**     | Not started |
 
 ### What to build
 
@@ -230,15 +231,15 @@ src/routes/vehicles/
 
 ### Acceptance criteria
 
-- [ ] Navigating to `/vehicles?q=Honda` shows filtered results
-- [ ] Each listing card shows photo, year/make/model, price, mileage, location, condition
-- [ ] Price badge (Below Market / Fair / Above Market) visible on every card
-- [ ] Mileage badge (Low / Average / High) visible on every card
-- [ ] Filter panel works: changing filters updates results without full page reload
-- [ ] Sort dropdown changes result order
-- [ ] Empty state renders when no results match
-- [ ] Results paginate at 20 per page
-- [ ] Responsive: sidebar filters on desktop, collapsed/bottom sheet on mobile
+- Navigating to `/vehicles?q=Honda` shows filtered results
+- Each listing card shows photo, year/make/model, price, mileage, location, condition
+- Price badge (Below Market / Fair / Above Market) visible on every card
+- Mileage badge (Low / Average / High) visible on every card
+- Filter panel works: changing filters updates results without full page reload
+- Sort dropdown changes result order
+- Empty state renders when no results match
+- Results paginate at 20 per page
+- Responsive: sidebar filters on desktop, collapsed/bottom sheet on mobile
 
 ### PRD requirements covered
 
@@ -248,10 +249,10 @@ RP-01, RP-02, RP-03, RP-04, RP-05, RP-06, RP-07
 
 ## Slice 4 — Vehicle Detail Page: Gallery + specs + sticky panel
 
-| | |
-|---|---|
-| **Blocked by** | Slice 1 |
-| **Status** | Not started |
+|                |             |
+| -------------- | ----------- |
+| **Blocked by** | Slice 1     |
+| **Status**     | Not started |
 
 ### What to build
 
@@ -271,7 +272,7 @@ The listing detail page — photo gallery, structured specs, seller info, and a 
   - Username, feedback score, location, member since
 - **Price in market context**:
   - "$X below/above market average for this year/make/model/trim"
-- **`StickyPanel.svelte`**:
+- `**StickyPanel.svelte`\*\*:
   - Fixed bar (bottom on mobile, sidebar or top on desktop)
   - Shows: price verdict badge, mileage context, one-line AI teaser
   - "See full analysis" CTA button — scrolls to or expands the AI Confidence Panel (wired in Slice 5)
@@ -289,16 +290,16 @@ src/lib/components/
 
 ### Acceptance criteria
 
-- [ ] Navigating to `/vehicles/[id]` renders the full detail page
-- [ ] Photo gallery supports swipe (mobile) and keyboard nav (desktop)
-- [ ] Spec table renders all vehicle fields in structured format
-- [ ] Seller info block shows username, feedback score, location, member since
-- [ ] Price is shown with market context ("$2,100 below market average")
-- [ ] Sticky panel is visible on page load without scrolling
-- [ ] Sticky panel shows price verdict, mileage context, and "See full analysis" CTA
-- [ ] Page is shareable via URL
-- [ ] Invalid ID returns a 404 or graceful error
-- [ ] Responsive across all breakpoints
+- Navigating to `/vehicles/[id]` renders the full detail page
+- Photo gallery supports swipe (mobile) and keyboard nav (desktop)
+- Spec table renders all vehicle fields in structured format
+- Seller info block shows username, feedback score, location, member since
+- Price is shown with market context ("$2,100 below market average")
+- Sticky panel is visible on page load without scrolling
+- Sticky panel shows price verdict, mileage context, and "See full analysis" CTA
+- Page is shareable via URL
+- Invalid ID returns a 404 or graceful error
+- Responsive across all breakpoints
 
 ### PRD requirements covered
 
@@ -308,10 +309,10 @@ VD-01, VD-02, VD-03, VD-04, VD-05, VD-06
 
 ## Slice 5 — AI Confidence Panel: Claude API + server-side caching
 
-| | |
-|---|---|
-| **Blocked by** | Slice 4 |
-| **Status** | Not started |
+|                |             |
+| -------------- | ----------- |
+| **Blocked by** | Slice 4     |
+| **Status**     | Not started |
 
 ### What to build
 
@@ -327,7 +328,7 @@ The centrepiece — an expandable AI panel on the detail page that synthesises k
   - Caches response in-memory by listing ID (Map or similar); returns cached response on subsequent requests instantly
   - Returns JSON with three sections: `knownIssues`, `priceVerdict`, `questionsToAsk`
   - Graceful error handling: returns structured error, never exposes API key or raw error
-- **`ConfidencePanel.svelte`** in `src/lib/components/`:
+- `**ConfidencePanel.svelte`\*\* in `src/lib/components/`:
   - Expandable panel on the detail page, triggered by "See full analysis" CTA in StickyPanel
   - On expand: fetches `/api/confidence/[id]`
   - **Section 1 — Known Issues**: reliability concerns for this year/make/model/trim. Includes disclaimer: "AI-generated analysis — not a vehicle inspection."
@@ -349,16 +350,16 @@ src/lib/components/
 
 ### Acceptance criteria
 
-- [ ] Expanding the panel on the detail page triggers a fetch to `/api/confidence/[id]`
-- [ ] API call is server-side only — `ANTHROPIC_API_KEY` never in client bundle or network tab
-- [ ] Loading skeleton shows on first open while API responds
-- [ ] Panel renders 3 sections in order: Known Issues → Price Verdict → Questions to Ask
-- [ ] Known Issues section includes AI disclaimer
-- [ ] Price verdict shows one of three verdicts with plain-language reasoning
-- [ ] Seller questions are specific to the listing (not generic boilerplate) — verifiable by comparing 2–3 different listings
-- [ ] Second open of the same listing returns instantly (cached, no loading state)
-- [ ] API error produces a graceful fallback, not a broken UI
-- [ ] Panel is responsive across all breakpoints
+- Expanding the panel on the detail page triggers a fetch to `/api/confidence/[id]`
+- API call is server-side only — `ANTHROPIC_API_KEY` never in client bundle or network tab
+- Loading skeleton shows on first open while API responds
+- Panel renders 3 sections in order: Known Issues → Price Verdict → Questions to Ask
+- Known Issues section includes AI disclaimer
+- Price verdict shows one of three verdicts with plain-language reasoning
+- Seller questions are specific to the listing (not generic boilerplate) — verifiable by comparing 2–3 different listings
+- Second open of the same listing returns instantly (cached, no loading state)
+- API error produces a graceful fallback, not a broken UI
+- Panel is responsive across all breakpoints
 
 ### PRD requirements covered
 
@@ -368,10 +369,10 @@ AI-01, AI-02, AI-03, AI-04, AI-05, AI-06, AI-07, AI-08, AI-09
 
 ## Slice 6 — Contact Seller Modal + Session Save
 
-| | |
-|---|---|
-| **Blocked by** | Slice 5 |
-| **Status** | Not started |
+|                |             |
+| -------------- | ----------- |
+| **Blocked by** | Slice 5     |
+| **Status**     | Not started |
 
 ### What to build
 
@@ -379,7 +380,7 @@ The bridge from analysis to action — a contact modal with AI-generated questio
 
 ### Scope
 
-- **`ContactModal.svelte`** in `src/lib/components/`:
+- `**ContactModal.svelte`\*\* in `src/lib/components/`:
   - Triggered by "Contact Seller" CTA on the detail page
   - Receives the seller questions from AI panel Section 3
   - Pre-populates the message body with those questions
@@ -403,13 +404,13 @@ src/lib/stores/
 
 ### Acceptance criteria
 
-- [ ] "Contact Seller" CTA opens a modal
-- [ ] Modal message body is pre-populated with the AI-generated seller questions from panel Section 3
-- [ ] Save button toggles saved state visually (e.g. filled/unfilled icon)
-- [ ] Saved state persists across page navigation within the session
-- [ ] Saved state clears on page refresh
-- [ ] Contact CTA is sticky on mobile
-- [ ] Modal is responsive and accessible (keyboard navigable, focus trap)
+- "Contact Seller" CTA opens a modal
+- Modal message body is pre-populated with the AI-generated seller questions from panel Section 3
+- Save button toggles saved state visually (e.g. filled/unfilled icon)
+- Saved state persists across page navigation within the session
+- Saved state clears on page refresh
+- Contact CTA is sticky on mobile
+- Modal is responsive and accessible (keyboard navigable, focus trap)
 
 ### PRD requirements covered
 
@@ -423,7 +424,7 @@ Agents append entries here when a slice is completed or partially completed. New
 
 ### Slice 1 — Foundation
 
-_(No entries yet.)_
+- **2026-04-04** — Slice 1 complete. Node upgraded to v22 (required by shadcn-svelte CLI). shadcn-svelte v1.2.7 installed via CLI (Badge, Button, Card, Input, Dialog, Skeleton, Separator into `src/lib/components/ui/`); `tailwind-merge`, `clsx`, `lucide-svelte` added as deps; `$lib/utils.ts` created with `cn()` and shadcn type helpers. Design system in `src/routes/layout.css`: warm amber OKLCH palette, Fraunces + Outfit fonts, signal color tokens. Types in `src/lib/types/listing.ts`. 20 realistic mock listings in `src/lib/api/mock.ts` (mix of private/dealer, varied conditions). API layer in `src/lib/api/index.ts` (toggle via `VITE_USE_MOCK_API`). `ListingCard.svelte` and `SignalBadge.svelte` built. Nav shell in `+layout.svelte`. Homepage placeholder at `+page.svelte` renders badge smoke test + 3 listing cards. `pnpm check` passes with 0 errors. Dev server runs at `:5175`. Caveat: picsum placeholder images only.
 
 ### Slice 2 — Homepage
 
