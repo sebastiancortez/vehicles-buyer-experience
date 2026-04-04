@@ -1,4 +1,4 @@
-# CLAUDE.md
+# [CLAUDE.md](http://CLAUDE.md)
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -47,3 +47,4 @@ The Svelte MCP server is configured (`.mcp.json`) at `https://mcp.svelte.dev/mcp
 2. **get-documentation** — Fetch full docs for relevant sections (check `use_cases` field to select)
 3. **svelte-autofixer** — MUST run on all Svelte code before presenting to user; repeat until no issues remain
 4. **playground-link** — Only generate after user confirms; never use when code was written to project files
+

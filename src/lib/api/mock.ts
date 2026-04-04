@@ -1,7 +1,7 @@
 import type { Listing } from '$lib/types/listing';
 
-// Placeholder images from picsum — deterministic by ID so they're stable
-const img = (id: number, w = 800, h = 500) => `https://picsum.photos/seed/car${id}/${w}/${h}`;
+// Deterministic placeholder images so cards stay visually stable across reloads.
+const img = (id: number, w = 960, h = 640) => `https://picsum.photos/seed/vehicle-${id}/${w}/${h}`;
 
 export const mockListings: Listing[] = [
 	{
@@ -11,10 +11,10 @@ export const mockListings: Listing[] = [
 		make: 'Honda',
 		model: 'CR-V',
 		trim: 'EX-L',
-		price: 22_500,
-		marketAverage: 24_800,
+		price: 22_900,
+		marketAverage: 24_700,
 		priceBadge: 'below_market',
-		mileage: 41_200,
+		mileage: 46_800,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'cvt',
@@ -22,32 +22,32 @@ export const mockListings: Listing[] = [
 		color: 'Lunar Silver Metallic',
 		vin: '2HKRW2H8****4521',
 		description:
-			'One owner, garage kept, non-smoker. Full Honda dealer service history — all oil changes, brake service, and the 40k major service done at Honda of Scarborough. Heated front seats, sunroof, Apple CarPlay. No accidents on Carfax. Winter tires included on separate rims. Selling because we bought a minivan.',
+			'One-owner family SUV with Honda dealer records from new. EX-L trim with leather, heated seats, power tailgate, sunroof, and Apple CarPlay. Recent work includes rear brakes, battery, and the 48k service. No accident claims reported. Includes winter wheels and cargo tray.',
 		photos: [img(1), img(2), img(3), img(4)],
 		location: 'Toronto, ON',
 		seller: {
 			username: 'PaulaT_Drives',
-			feedbackScore: 312,
+			feedbackScore: 318,
 			feedbackPercent: 99.4,
 			location: 'Toronto, ON',
 			memberSince: '2014-03-11',
 			type: 'private'
 		},
-		watcherCount: 47,
-		saveCount: 23,
-		listedAt: '2026-03-28'
+		watcherCount: 52,
+		saveCount: 27,
+		listedAt: '2026-04-01'
 	},
 	{
 		id: 'lst-002',
-		title: '2021 Toyota RAV4 XLE Premium',
+		title: '2021 Toyota RAV4 XLE Premium AWD',
 		year: 2021,
 		make: 'Toyota',
 		model: 'RAV4',
 		trim: 'XLE Premium',
-		price: 31_900,
-		marketAverage: 30_400,
+		price: 31_800,
+		marketAverage: 30_900,
 		priceBadge: 'above_market',
-		mileage: 28_500,
+		mileage: 29_400,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'automatic',
@@ -55,7 +55,7 @@ export const mockListings: Listing[] = [
 		color: 'Blueprint',
 		vin: '2T3P1RFV****8802',
 		description:
-			'Certified Pre-Owned. 160-point inspection completed. Toyota Certified warranty until 2027. Includes all weather mats, cargo tray, and block heater. Full dealer service records available. Available for test drive at our Mississauga location.',
+			'Toyota Certified with balance of powertrain warranty and a fresh 160-point inspection. XLE Premium with SofTex, power liftgate, sunroof, blind-spot monitoring, and all-weather liners. Dealer asking a premium because it is clean, local, and fully reconditioned.',
 		photos: [img(5), img(6), img(7), img(8)],
 		location: 'Mississauga, ON',
 		seller: {
@@ -66,9 +66,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2009-06-02',
 			type: 'dealer'
 		},
-		watcherCount: 62,
-		saveCount: 31,
-		listedAt: '2026-03-27'
+		watcherCount: 64,
+		saveCount: 35,
+		listedAt: '2026-03-30'
 	},
 	{
 		id: 'lst-003',
@@ -77,10 +77,10 @@ export const mockListings: Listing[] = [
 		make: 'Ford',
 		model: 'F-150',
 		trim: 'XLT',
-		price: 24_800,
-		marketAverage: 24_200,
+		price: 24_600,
+		marketAverage: 24_100,
 		priceBadge: 'fair',
-		mileage: 87_400,
+		mileage: 89_700,
 		mileageBadge: 'average',
 		condition: 'good',
 		transmission: 'automatic',
@@ -88,20 +88,20 @@ export const mockListings: Listing[] = [
 		color: 'Oxford White',
 		vin: '1FTFW1EF****3317',
 		description:
-			'Good condition overall. Some light scratches on the tailgate — photos included. 3.5L EcoBoost. Tows well, used for light hauling. Service records from 2017-2022 available, then moved to an independent shop. New rear brakes at 80k. Tires at 60%.',
-		photos: [img(9), img(10), img(11)],
+			'3.5L EcoBoost, SuperCrew, tow package, spray-in liner. Used for commuting and weekend hardware-store runs, not heavy towing. Service history is complete to 2022, then maintained at a local independent shop. Tailgate and rear bumper have light scratches shown in photos.',
+		photos: [img(9), img(10), img(11), img(12)],
 		location: 'Calgary, AB',
 		seller: {
 			username: 'mike_alberta',
-			feedbackScore: 89,
+			feedbackScore: 91,
 			feedbackPercent: 97.8,
 			location: 'Calgary, AB',
 			memberSince: '2017-08-14',
 			type: 'private'
 		},
-		watcherCount: 38,
+		watcherCount: 37,
 		saveCount: 15,
-		listedAt: '2026-03-25'
+		listedAt: '2026-03-28'
 	},
 	{
 		id: 'lst-004',
@@ -110,10 +110,10 @@ export const mockListings: Listing[] = [
 		make: 'Mazda',
 		model: 'CX-5',
 		trim: 'GT',
-		price: 33_500,
-		marketAverage: 35_100,
+		price: 33_400,
+		marketAverage: 35_000,
 		priceBadge: 'below_market',
-		mileage: 19_800,
+		mileage: 22_100,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'automatic',
@@ -121,8 +121,8 @@ export const mockListings: Listing[] = [
 		color: 'Soul Red Crystal',
 		vin: 'JM3KFBDM****5573',
 		description:
-			'Company vehicle — meticulously maintained by our fleet service department. Full Mazda dealer service history. No accidents, no rentals. Interior like new. Includes the GT-exclusive Bose audio, heated/ventilated seats, HUD. Transferable balance of Mazda factory warranty.',
-		photos: [img(12), img(13), img(14), img(15), img(16)],
+			'Former executive fleet vehicle with complete Mazda dealer history and recent inspection. GT trim includes Bose audio, HUD, heated and ventilated front seats, heated rear seats, adaptive cruise, and power tailgate. Very clean interior, no smoke smell, no visible wear on bolsters.',
+		photos: [img(13), img(14), img(15), img(16), img(17)],
 		location: 'Vancouver, BC',
 		seller: {
 			username: 'PacificFleetSales',
@@ -132,9 +132,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2011-01-20',
 			type: 'dealer'
 		},
-		watcherCount: 71,
-		saveCount: 44,
-		listedAt: '2026-03-29'
+		watcherCount: 73,
+		saveCount: 46,
+		listedAt: '2026-04-02'
 	},
 	{
 		id: 'lst-005',
@@ -143,18 +143,19 @@ export const mockListings: Listing[] = [
 		make: 'Toyota',
 		model: 'Camry',
 		trim: 'XSE V6',
-		price: 13_200,
-		marketAverage: 14_800,
+		price: 13_100,
+		marketAverage: 14_900,
 		priceBadge: 'below_market',
-		mileage: 118_000,
+		mileage: 121_400,
 		mileageBadge: 'high',
 		condition: 'good',
 		transmission: 'automatic',
 		drivetrain: 'fwd',
 		color: 'Midnight Black Metallic',
 		vin: '4T1BK1FK****6605',
-		description: 'High mileage but runs great. V6 has plenty of power.',
-		photos: [img(17), img(18)],
+		description:
+			'High-mileage V6 Camry that still drives strong. Two keys, remote start, and recent front struts. Seller says there is no rust through, only stone chips and a crack in the lower front lip. Description is brief, so a buyer should confirm oil-consumption history and transmission service.',
+		photos: [img(18), img(19), img(20)],
 		location: 'Ottawa, ON',
 		seller: {
 			username: 'dave_ottawa99',
@@ -164,21 +165,21 @@ export const mockListings: Listing[] = [
 			memberSince: '2019-11-30',
 			type: 'private'
 		},
-		watcherCount: 22,
-		saveCount: 9,
-		listedAt: '2026-03-30'
+		watcherCount: 24,
+		saveCount: 10,
+		listedAt: '2026-04-03'
 	},
 	{
 		id: 'lst-006',
-		title: '2020 Volkswagen Golf GTI Autobahn',
+		title: '2020 Volkswagen Golf GTI Autobahn 6MT',
 		year: 2020,
 		make: 'Volkswagen',
 		model: 'Golf GTI',
 		trim: 'Autobahn',
-		price: 27_900,
-		marketAverage: 26_500,
+		price: 28_100,
+		marketAverage: 26_800,
 		priceBadge: 'above_market',
-		mileage: 33_100,
+		mileage: 34_200,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'manual',
@@ -186,8 +187,8 @@ export const mockListings: Listing[] = [
 		color: 'Tornado Red',
 		vin: '3VW547AUXLM****42',
 		description:
-			'6-speed manual, never tracked. Full VW dealer service records. DCC adaptive suspension. Heated seats, 8" Discover Pro nav. Continental ExtremeContact Sport tires new at 28k. One minor paint chip on hood — retouched. Available for inspection at our facility in Oakville.',
-		photos: [img(19), img(20), img(21), img(22)],
+			'Manual Autobahn with DCC, Fender audio, navigation, and plaid-seat delete. Seller states the car was never tracked and remains stock aside from Michelin Pilot Sport tires. Dealer reconditioning included fresh front brakes and a carbon cleaning service. Strong enthusiast appeal, but priced above average.',
+		photos: [img(21), img(22), img(23), img(24)],
 		location: 'Oakville, ON',
 		seller: {
 			username: 'PrestigeAutoHaus',
@@ -197,9 +198,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2013-05-17',
 			type: 'dealer'
 		},
-		watcherCount: 58,
-		saveCount: 27,
-		listedAt: '2026-03-26'
+		watcherCount: 59,
+		saveCount: 30,
+		listedAt: '2026-03-29'
 	},
 	{
 		id: 'lst-007',
@@ -208,18 +209,18 @@ export const mockListings: Listing[] = [
 		make: 'Honda',
 		model: 'Civic',
 		trim: 'LX',
-		price: 9_400,
-		marketAverage: 10_200,
+		price: 9_200,
+		marketAverage: 10_300,
 		priceBadge: 'below_market',
-		mileage: 134_500,
+		mileage: 136_900,
 		mileageBadge: 'high',
 		condition: 'good',
 		transmission: 'cvt',
 		drivetrain: 'fwd',
 		color: 'Taffeta White',
 		vin: '2HGFC2F5****7801',
-		description: 'Reliable daily. Good condition.',
-		photos: [img(23), img(24)],
+		description: 'Reliable commuter. Good on gas. Two sets of tires. Selling as-is.',
+		photos: [img(25), img(26)],
 		location: 'Hamilton, ON',
 		seller: {
 			username: 'sam_h_sells',
@@ -229,9 +230,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2021-02-08',
 			type: 'private'
 		},
-		watcherCount: 19,
-		saveCount: 6,
-		listedAt: '2026-04-01'
+		watcherCount: 21,
+		saveCount: 8,
+		listedAt: '2026-04-04'
 	},
 	{
 		id: 'lst-008',
@@ -240,10 +241,10 @@ export const mockListings: Listing[] = [
 		make: 'Subaru',
 		model: 'Outback',
 		trim: 'Touring XT',
-		price: 41_500,
-		marketAverage: 42_800,
+		price: 41_200,
+		marketAverage: 42_900,
 		priceBadge: 'below_market',
-		mileage: 11_200,
+		mileage: 12_600,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'cvt',
@@ -251,8 +252,8 @@ export const mockListings: Listing[] = [
 		color: 'Autumn Green Metallic',
 		vin: '4S4BTAPC****3302',
 		description:
-			'Nearly new. Lease return off a 24-month corporate lease. Full Subaru CPO inspection and recertification completed. Factory warranty in full effect until 2027 / 80,000 km. Starlink telematics subscription current. All-season mats, splash guards, dog guard included.',
-		photos: [img(25), img(26), img(27), img(28)],
+			'Turbo Touring XT lease return with the full Subaru Eyesight suite, Nappa leather, heated wheel, ventilated seats, front camera, and factory hitch. Dealer notes a clean inspection and original paint on all panels. Strong fit for family-road-trip and winter-weather searches.',
+		photos: [img(27), img(28), img(29), img(30)],
 		location: 'Edmonton, AB',
 		seller: {
 			username: 'NorthStarSubaru',
@@ -262,9 +263,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2008-09-14',
 			type: 'dealer'
 		},
-		watcherCount: 84,
-		saveCount: 52,
-		listedAt: '2026-03-31'
+		watcherCount: 86,
+		saveCount: 54,
+		listedAt: '2026-04-03'
 	},
 	{
 		id: 'lst-009',
@@ -273,19 +274,19 @@ export const mockListings: Listing[] = [
 		make: 'BMW',
 		model: '3 Series',
 		trim: '330i xDrive',
-		price: 26_800,
-		marketAverage: 28_900,
+		price: 26_300,
+		marketAverage: 28_600,
 		priceBadge: 'below_market',
-		mileage: 68_400,
+		mileage: 71_500,
 		mileageBadge: 'average',
 		condition: 'good',
 		transmission: 'automatic',
 		drivetrain: 'awd',
-		color: 'Melbourne Red',
+		color: 'Melbourne Red Metallic',
 		vin: 'WBA8B9C5****2261',
 		description:
-			'Sport Line package. Heads-up display, harman/kardon audio. Recent service: oil and filter at 66k, new front tires at 64k. Some curb rash on rear left wheel — see photos. Timing chain recall completed at BMW dealer. Maintenance records available.',
-		photos: [img(29), img(30), img(31), img(32)],
+			'Sport Line with black interior, heated seats, and HUD. Seller discloses curb rash on one wheel and says the valve cover gasket was done last year. Service records are partial rather than complete. Looks attractive on price, but maintenance questions will matter here.',
+		photos: [img(31), img(32), img(33), img(34)],
 		location: 'Toronto, ON',
 		seller: {
 			username: 'euro_drives_toronto',
@@ -295,21 +296,21 @@ export const mockListings: Listing[] = [
 			memberSince: '2016-07-22',
 			type: 'private'
 		},
-		watcherCount: 43,
+		watcherCount: 41,
 		saveCount: 18,
-		listedAt: '2026-03-28'
+		listedAt: '2026-03-31'
 	},
 	{
 		id: 'lst-010',
-		title: '2014 Chevrolet Silverado 1500 LTZ',
+		title: '2014 Chevrolet Silverado 1500 LTZ 4x4',
 		year: 2014,
 		make: 'Chevrolet',
 		model: 'Silverado 1500',
 		trim: 'LTZ',
 		price: 18_500,
-		marketAverage: 17_800,
+		marketAverage: 18_100,
 		priceBadge: 'fair',
-		mileage: 156_200,
+		mileage: 159_300,
 		mileageBadge: 'high',
 		condition: 'good',
 		transmission: 'automatic',
@@ -317,20 +318,20 @@ export const mockListings: Listing[] = [
 		color: 'Tungsten Metallic',
 		vin: '1GCVKREC****4432',
 		description:
-			'High mileage, priced to move. 5.3L V8. Z71 off-road package. New transmission at 140k (receipt included). Good rubber. Some surface rust on underside — normal for a Saskatchewan truck. Everything works.',
-		photos: [img(33), img(34), img(35)],
+			'Z71 package, crew cab, 5.3 V8. Seller says the transmission was replaced at 140k and provides a receipt. Some surface rust on the frame and lower bed sides, typical for prairie use. Practical truck listing with enough detail to be believable, but not especially polished.',
+		photos: [img(35), img(36), img(37)],
 		location: 'Saskatoon, SK',
 		seller: {
-			username: 'prairie_fleet_sk',
+			username: 'prairie_worktrucks',
 			feedbackScore: 67,
 			feedbackPercent: 97.0,
 			location: 'Saskatoon, SK',
 			memberSince: '2018-04-03',
 			type: 'private'
 		},
-		watcherCount: 31,
-		saveCount: 12,
-		listedAt: '2026-03-24'
+		watcherCount: 30,
+		saveCount: 13,
+		listedAt: '2026-03-26'
 	},
 	{
 		id: 'lst-011',
@@ -339,10 +340,10 @@ export const mockListings: Listing[] = [
 		make: 'Hyundai',
 		model: 'Tucson',
 		trim: 'Preferred',
-		price: 24_900,
-		marketAverage: 25_600,
+		price: 24_700,
+		marketAverage: 25_800,
 		priceBadge: 'below_market',
-		mileage: 38_700,
+		mileage: 40_500,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'automatic',
@@ -350,20 +351,20 @@ export const mockListings: Listing[] = [
 		color: 'Phantom Black',
 		vin: 'KM8J2CA4****9012',
 		description:
-			'One owner, accident free. Full Hyundai dealer service history. Remote start, heated seats/wheel, blind spot monitoring. Winter tires (stored separately) included. Non-smoker, no pets. Moving abroad — must sell.',
-		photos: [img(36), img(37), img(38), img(39)],
-		location: 'Montréal, QC',
+			'One-owner Tucson with heated seats, heated wheel, lane keep assist, blind-spot monitoring, and remote start. Seller is moving overseas and wants a quick sale but still has dealer maintenance invoices. Good example of a realistic private listing that is clean, credible, and slightly under market.',
+		photos: [img(38), img(39), img(40), img(41)],
+		location: 'Montreal, QC',
 		seller: {
 			username: 'leila_mtl',
 			feedbackScore: 74,
 			feedbackPercent: 100,
-			location: 'Montréal, QC',
+			location: 'Montreal, QC',
 			memberSince: '2020-01-15',
 			type: 'private'
 		},
-		watcherCount: 53,
-		saveCount: 29,
-		listedAt: '2026-03-29'
+		watcherCount: 55,
+		saveCount: 30,
+		listedAt: '2026-04-02'
 	},
 	{
 		id: 'lst-012',
@@ -372,19 +373,19 @@ export const mockListings: Listing[] = [
 		make: 'Audi',
 		model: 'Q5',
 		trim: 'Progressiv',
-		price: 34_700,
-		marketAverage: 32_900,
+		price: 34_900,
+		marketAverage: 33_100,
 		priceBadge: 'above_market',
-		mileage: 52_300,
+		mileage: 54_100,
 		mileageBadge: 'average',
 		condition: 'excellent',
 		transmission: 'automatic',
 		drivetrain: 'awd',
-		color: 'Floret Silver',
+		color: 'Florett Silver Metallic',
 		vin: 'WA1BNAFY****3344',
 		description:
-			'Virtual Cockpit, panoramic sunroof, massage seats. Serviced exclusively at Audi Centre Ottawa — full records. Extended Audi Care prepaid maintenance plan transferable to new owner (covers next 2 services). New Continental tires at 48k.',
-		photos: [img(40), img(41), img(42), img(43)],
+			'Progressiv trim with Virtual Cockpit, pano roof, 360 camera, and Bang & Olufsen audio. Audi dealer has full records and notes fresh tires plus front brakes. Price is on the high side, but the listing quality and reconditioning are unusually strong compared with private-market examples.',
+		photos: [img(42), img(43), img(44), img(45)],
 		location: 'Ottawa, ON',
 		seller: {
 			username: 'AudiCentreOttawa',
@@ -394,9 +395,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2007-03-12',
 			type: 'dealer'
 		},
-		watcherCount: 67,
-		saveCount: 35,
-		listedAt: '2026-03-27'
+		watcherCount: 66,
+		saveCount: 34,
+		listedAt: '2026-03-30'
 	},
 	{
 		id: 'lst-013',
@@ -405,10 +406,10 @@ export const mockListings: Listing[] = [
 		make: 'Kia',
 		model: 'Telluride',
 		trim: 'EX',
-		price: 35_500,
-		marketAverage: 36_200,
+		price: 35_600,
+		marketAverage: 36_100,
 		priceBadge: 'fair',
-		mileage: 44_100,
+		mileage: 46_200,
 		mileageBadge: 'average',
 		condition: 'excellent',
 		transmission: 'automatic',
@@ -416,8 +417,8 @@ export const mockListings: Listing[] = [
 		color: 'Snow White Pearl',
 		vin: '5XYP3DHC****1177',
 		description:
-			'8-seat configuration. Fully loaded EX: panoramic sunroof, second-row captain chairs, 10.25" touchscreen. Kia dealer service records complete. Tires replaced at 40k. Child seat anchors in all 3 rows. Perfect family SUV.',
-		photos: [img(44), img(45), img(46), img(47)],
+			'EX AWD with captain chairs, dual sunroofs, Harman Kardon audio, and full Kia service history. Clean family-hauler listing with enough equipment to explain shopper interest. Dealer notes one previous windshield replacement but no collision repair.',
+		photos: [img(46), img(47), img(48), img(49)],
 		location: 'Winnipeg, MB',
 		seller: {
 			username: 'KiaCityWinnipeg',
@@ -427,9 +428,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2010-08-22',
 			type: 'dealer'
 		},
-		watcherCount: 76,
-		saveCount: 41,
-		listedAt: '2026-03-30'
+		watcherCount: 78,
+		saveCount: 43,
+		listedAt: '2026-04-01'
 	},
 	{
 		id: 'lst-014',
@@ -438,18 +439,19 @@ export const mockListings: Listing[] = [
 		make: 'Toyota',
 		model: 'Prius',
 		trim: 'Three',
-		price: 7_900,
-		marketAverage: 9_100,
+		price: 7_800,
+		marketAverage: 9_000,
 		priceBadge: 'below_market',
-		mileage: 189_000,
+		mileage: 191_600,
 		mileageBadge: 'high',
 		condition: 'fair',
 		transmission: 'cvt',
 		drivetrain: 'fwd',
 		color: 'Classic Silver Metallic',
 		vin: 'JTDKN3DU****8811',
-		description: 'High mileage. Still gets 5L/100km. Some cosmetic wear.',
-		photos: [img(48), img(49)],
+		description:
+			'High-mileage commuter with cosmetic wear, a cracked rear bumper corner, and fading on the roof. Seller says the hybrid battery is original and the car still returns strong fuel economy. This is intentionally a riskier budget listing that should trigger battery-health and maintenance questions.',
+		photos: [img(50), img(51), img(52)],
 		location: 'Victoria, BC',
 		seller: {
 			username: 'vic_green_cars',
@@ -459,9 +461,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2022-06-10',
 			type: 'private'
 		},
-		watcherCount: 14,
-		saveCount: 4,
-		listedAt: '2026-04-02'
+		watcherCount: 17,
+		saveCount: 5,
+		listedAt: '2026-04-04'
 	},
 	{
 		id: 'lst-015',
@@ -470,10 +472,10 @@ export const mockListings: Listing[] = [
 		make: 'Tesla',
 		model: 'Model Y',
 		trim: 'Long Range',
-		price: 52_900,
-		marketAverage: 55_400,
+		price: 52_600,
+		marketAverage: 55_300,
 		priceBadge: 'below_market',
-		mileage: 16_800,
+		mileage: 18_200,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'automatic',
@@ -481,8 +483,8 @@ export const mockListings: Listing[] = [
 		color: 'Pearl White Multi-Coat',
 		vin: '5YJYGDEE****1102',
 		description:
-			'20" Induction wheels. Full Self-Driving (Supervised) capability included. Wall Connector and mobile connector included. Tesla app history available. No accidents. Supercharger credit balance transferable. Only selling due to company lease allowance change.',
-		photos: [img(50), img(51), img(52), img(53)],
+			'Long Range AWD with white interior, tow hitch, and 20-inch Induction wheels. Seller includes mobile connector and notes one wheel has minor rash. App access history available. Attractive price for a fresh EV listing, but buyers will likely ask about winter range and tire wear.',
+		photos: [img(53), img(54), img(55), img(56)],
 		location: 'Calgary, AB',
 		seller: {
 			username: 'ryan_ev_yeg',
@@ -492,9 +494,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2015-11-04',
 			type: 'private'
 		},
-		watcherCount: 93,
-		saveCount: 61,
-		listedAt: '2026-04-01'
+		watcherCount: 96,
+		saveCount: 63,
+		listedAt: '2026-04-03'
 	},
 	{
 		id: 'lst-016',
@@ -503,10 +505,10 @@ export const mockListings: Listing[] = [
 		make: 'Ram',
 		model: '1500',
 		trim: 'Laramie',
-		price: 36_400,
-		marketAverage: 33_800,
+		price: 36_700,
+		marketAverage: 34_000,
 		priceBadge: 'above_market',
-		mileage: 71_200,
+		mileage: 72_800,
 		mileageBadge: 'average',
 		condition: 'excellent',
 		transmission: 'automatic',
@@ -514,8 +516,8 @@ export const mockListings: Listing[] = [
 		color: 'Bright Silver Metallic',
 		vin: '1C6RR7NT****5522',
 		description:
-			'Fully loaded Laramie: RamBox bed storage, Level 2 equipment group, 12" Uconnect 4C nav, heated/cooled leather, panoramic sunroof. Air suspension. All stock, no lifts or mods. Full Ram dealer service records. Always garaged.',
-		photos: [img(54), img(55), img(56), img(57)],
+			'Laramie with air suspension, heated and cooled leather, RamBox, panoramic roof, and upgraded audio. Dealer is asking strong money because the truck is stock, clean underneath, and fully serviced. Good case for testing when a nice listing is still likely overpriced.',
+		photos: [img(57), img(58), img(59), img(60)],
 		location: 'London, ON',
 		seller: {
 			username: 'StarlightAutoLondon',
@@ -525,9 +527,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2012-02-14',
 			type: 'dealer'
 		},
-		watcherCount: 49,
-		saveCount: 21,
-		listedAt: '2026-03-26'
+		watcherCount: 48,
+		saveCount: 22,
+		listedAt: '2026-03-29'
 	},
 	{
 		id: 'lst-017',
@@ -536,10 +538,10 @@ export const mockListings: Listing[] = [
 		make: 'Jeep',
 		model: 'Cherokee',
 		trim: 'Trailhawk',
-		price: 15_800,
-		marketAverage: 15_400,
+		price: 15_600,
+		marketAverage: 15_500,
 		priceBadge: 'fair',
-		mileage: 103_400,
+		mileage: 106_700,
 		mileageBadge: 'high',
 		condition: 'good',
 		transmission: 'automatic',
@@ -547,8 +549,8 @@ export const mockListings: Listing[] = [
 		color: 'Hydro Blue Pearl',
 		vin: '1C4PJMBS****7733',
 		description:
-			'9-speed automatic (recently relearned at dealer). Selec-Terrain 4x4. Rock Rails and Skid plates stock. Some rock chips on front bumper — expected for a Trailhawk. ZF recall completed. Recent: new battery, air filter.',
-		photos: [img(58), img(59), img(60)],
+			'Trailhawk with skid plates, tow hooks, and Selec-Terrain. Seller mentions the 9-speed transmission was reprogrammed after a dealer visit and that the battery is new. Good trail-focused spec, but the drivetrain history is exactly the kind of detail buyers should press on.',
+		photos: [img(61), img(62), img(63)],
 		location: 'Halifax, NS',
 		seller: {
 			username: 'jason_ns_offroad',
@@ -558,9 +560,9 @@ export const mockListings: Listing[] = [
 			memberSince: '2019-03-28',
 			type: 'private'
 		},
-		watcherCount: 27,
+		watcherCount: 28,
 		saveCount: 11,
-		listedAt: '2026-03-27'
+		listedAt: '2026-03-31'
 	},
 	{
 		id: 'lst-018',
@@ -569,19 +571,19 @@ export const mockListings: Listing[] = [
 		make: 'Ford',
 		model: 'Bronco',
 		trim: 'Outer Banks',
-		price: 54_900,
-		marketAverage: 51_200,
+		price: 54_800,
+		marketAverage: 51_500,
 		priceBadge: 'above_market',
-		mileage: 22_700,
+		mileage: 23_600,
 		mileageBadge: 'low',
 		condition: 'excellent',
 		transmission: 'automatic',
 		drivetrain: '4wd',
-		color: 'Eruption Green',
+		color: 'Eruption Green Metallic',
 		vin: '1FMEE5DP****4401',
 		description:
-			'Sasquatch Package. Mid package soft-top. Modular bumpers stock. Never taken off-road. Hard top doors and panels stored and included. MIC hardtop ordered from Ford dealer but NOT included (allocated separately). No accidents. Priced at market premium for colour scarcity.',
-		photos: [img(61), img(62), img(63), img(64)],
+			'Outer Banks with Sasquatch package, soft top, modular bumper, and Lux package. Seller says it has never been off-road and that hard-top panels are included. Premium pricing seems driven by color, options, and Bronco scarcity rather than objective value.',
+		photos: [img(64), img(65), img(66), img(67)],
 		location: 'Vancouver, BC',
 		seller: {
 			username: 'west_coast_rigs',
@@ -591,29 +593,29 @@ export const mockListings: Listing[] = [
 			memberSince: '2014-09-05',
 			type: 'private'
 		},
-		watcherCount: 88,
-		saveCount: 57,
-		listedAt: '2026-04-02'
+		watcherCount: 89,
+		saveCount: 58,
+		listedAt: '2026-04-04'
 	},
 	{
 		id: 'lst-019',
-		title: '2013 Honda Accord Sport Sedan',
+		title: '2013 Honda Accord Sport 6MT',
 		year: 2013,
 		make: 'Honda',
 		model: 'Accord',
 		trim: 'Sport',
-		price: 8_200,
-		marketAverage: 9_700,
+		price: 8_100,
+		marketAverage: 9_800,
 		priceBadge: 'below_market',
-		mileage: 144_800,
+		mileage: 147_900,
 		mileageBadge: 'high',
 		condition: 'good',
 		transmission: 'manual',
 		drivetrain: 'fwd',
-		color: 'Alabaster Silver',
+		color: 'Alabaster Silver Metallic',
 		vin: '1HGCR2F5****9941',
-		description: 'Clean title. Manual trans shifts cleanly. Good.',
-		photos: [img(65), img(66)],
+		description: 'Manual Accord. Clean title. Clutch feels good. Minor rust starting on rear arch.',
+		photos: [img(68), img(69)],
 		location: 'Kitchener, ON',
 		seller: {
 			username: 'kitchener_cars',
@@ -623,41 +625,41 @@ export const mockListings: Listing[] = [
 			memberSince: '2020-07-19',
 			type: 'private'
 		},
-		watcherCount: 16,
+		watcherCount: 18,
 		saveCount: 7,
-		listedAt: '2026-04-01'
+		listedAt: '2026-04-02'
 	},
 	{
 		id: 'lst-020',
-		title: '2021 Genesis GV80 3.5T AWD',
-		year: 2021,
-		make: 'Genesis',
-		model: 'GV80',
-		trim: '3.5T AWD',
-		price: 59_800,
-		marketAverage: 61_400,
+		title: '2020 Subaru WRX Sport-tech AWD - Rebuilt Title',
+		year: 2020,
+		make: 'Subaru',
+		model: 'WRX',
+		trim: 'Sport-tech',
+		price: 17_900,
+		marketAverage: 27_400,
 		priceBadge: 'below_market',
-		mileage: 24_300,
-		mileageBadge: 'low',
-		condition: 'excellent',
-		transmission: 'automatic',
+		mileage: 58_600,
+		mileageBadge: 'average',
+		condition: 'salvage',
+		transmission: 'manual',
 		drivetrain: 'awd',
-		color: 'Havana Brown',
-		vin: 'KMUHBDSB****8821',
+		color: 'World Rally Blue Pearl',
+		vin: 'JF1VA1E6****2205',
 		description:
-			'Prestige Package. 3.5T twin-turbo V6, air suspension. Head-up display, rear entertainment, 14-speaker Lexicon audio, 7-passenger configuration. Remote Smart Parking Assist. Valet mode logged. Full Genesis dealer service history. One of the most complete feature sets in this class at this price.',
-		photos: [img(67), img(68), img(69), img(70)],
-		location: 'Toronto, ON',
+			'Rebuilt-title WRX from front-right collision in 2023. Seller says repairs were completed professionally and alignment is straight, but only a few repair photos are provided. Cobb intake installed, stock exhaust included. This is the intentionally suspicious value listing for AI and trust-testing flows.',
+		photos: [img(70), img(71), img(72), img(73)],
+		location: 'Surrey, BC',
 		seller: {
-			username: 'GenesisOfNorthYork',
-			feedbackScore: 2241,
-			feedbackPercent: 99.6,
-			location: 'Toronto, ON',
-			memberSince: '2018-05-01',
-			type: 'dealer'
+			username: 'boostedwestcoast',
+			feedbackScore: 23,
+			feedbackPercent: 91.8,
+			location: 'Surrey, BC',
+			memberSince: '2023-05-12',
+			type: 'private'
 		},
-		watcherCount: 79,
-		saveCount: 48,
-		listedAt: '2026-03-31'
+		watcherCount: 112,
+		saveCount: 79,
+		listedAt: '2026-04-04'
 	}
 ];
