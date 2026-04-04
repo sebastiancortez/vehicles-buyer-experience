@@ -32,6 +32,7 @@ Vehicles Buyer Experience — a SvelteKit application for vehicle purchasing. Bu
 ## Architecture
 
 Standard SvelteKit file-based routing:
+
 - `src/routes/` — pages and layouts (`+page.svelte`, `+layout.svelte`, `+server.ts`, etc.)
 - `src/lib/` — shared code, importable via `$lib` alias
 - `src/app.html` — HTML shell with `data-sveltekit-preload-data="hover"`
