@@ -1,12 +1,13 @@
 # eBay Vehicles — Buyer Experience POC
+
 ## Product Requirements Document
 
-| | |
-|---|---|
-| **Status** | Draft — POC Scope |
-| **Author** | Sebastian |
-| **Date** | April 2025 |
-| **Version** | 0.2 |
+|                      |                                          |
+| -------------------- | ---------------------------------------- |
+| **Status**           | Draft — POC Scope                        |
+| **Author**           | Sebastian                                |
+| **Date**             | April 2025                               |
+| **Version**          | 0.2                                      |
 | **Interview Target** | Product Manager, eBay Vehicles — Toronto |
 
 > **Scope:** This PRD defines the requirements for a proof-of-concept prototype built to demonstrate product thinking for the eBay Vehicles PM role. It covers the full buyer journey — from discovery through to commitment — with the AI Confidence Panel as the centrepiece differentiator. Not every stage requires deep investment; the principle is **progressive trust**: small, intentional UX improvements at each stage compound into a cohesive experience.
@@ -44,23 +45,23 @@ The problem doesn't end at search. At every stage of the journey, the current ex
 
 ### 2.2 Supporting Evidence
 
-| Source | Insight | Anxiety Type |
-|---|---|---|
-| Cox Automotive | Buyers spend 14+ hours researching before purchase — most of this is anxiety-reduction, not discovery | Trust gap |
-| CarGurus Growth | Built a multi-billion dollar business on one insight: showing buyers whether a price is Good, Fair, or Overpriced. Price transparency directly drives conversion. | Price anxiety |
-| CarFax / AutoCheck | Two companies exist entirely to address vehicle history anxiety — and both charge for it. Unmet need at scale. | History anxiety |
-| eBay Motors | eBay already offers vehicle history reports as an add-on — internal validation that trust is a known conversion problem. | Platform signal |
-| J.D. Power (Used Car) | Price validation is the #1 concern for used car buyers, followed by vehicle condition confidence. | Primary barrier |
+| Source                | Insight                                                                                                                                                           | Anxiety Type    |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| Cox Automotive        | Buyers spend 14+ hours researching before purchase — most of this is anxiety-reduction, not discovery                                                             | Trust gap       |
+| CarGurus Growth       | Built a multi-billion dollar business on one insight: showing buyers whether a price is Good, Fair, or Overpriced. Price transparency directly drives conversion. | Price anxiety   |
+| CarFax / AutoCheck    | Two companies exist entirely to address vehicle history anxiety — and both charge for it. Unmet need at scale.                                                    | History anxiety |
+| eBay Motors           | eBay already offers vehicle history reports as an add-on — internal validation that trust is a known conversion problem.                                          | Platform signal |
+| J.D. Power (Used Car) | Price validation is the #1 concern for used car buyers, followed by vehicle condition confidence.                                                                 | Primary barrier |
 
 > **PM Validation Plan:** If in the role, the first action would be to pull listing-page drop-off rates segmented by vehicle price range, and run a post-session survey with buyers who viewed but did not complete a purchase. The prototype hypothesis is that >40% of abandonment is confidence-related, not price-related.
 
 ### 2.3 Competitive Gap
 
-| Competitor | Gap |
-|---|---|
-| CarGurus | Price analysis badge, but no AI guidance, no seller coaching, no comparison tool |
-| AutoTrader | Strong filtering UX, but no confidence layer, dealer-heavy inventory skews trust |
-| Cars.com | Review-based trust signals, but weak on price analysis, no AI features |
+| Competitor              | Gap                                                                                                               |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| CarGurus                | Price analysis badge, but no AI guidance, no seller coaching, no comparison tool                                  |
+| AutoTrader              | Strong filtering UX, but no confidence layer, dealer-heavy inventory skews trust                                  |
+| Cars.com                | Review-based trust signals, but weak on price analysis, no AI features                                            |
 | eBay Vehicles (current) | Largest private-party inventory, vehicle history add-on, but search-first UX and no confidence layer at any stage |
 
 ---
@@ -77,14 +78,14 @@ The problem doesn't end at search. At every stage of the journey, the current ex
 
 ### 3.2 Production Success Metrics (Hypothetical)
 
-| Metric | Target / Hypothesis |
-|---|---|
-| Listing-page conversion rate | +15% among users who engage with AI panel vs. control |
-| Discovery-to-listing click rate | +10% for guided-selector users vs. keyword-search users |
-| Time-to-first-relevant-listing | Reduction of >30% for guided-selector users |
-| AI panel engagement rate | >25% of listing page visitors open and interact with the confidence panel |
-| Buyer satisfaction (CSAT) | Meaningful improvement in post-purchase survey for guided-flow users |
-| Return visit / save rate | % of buyers who save a vehicle and return within 7 days |
+| Metric                          | Target / Hypothesis                                                       |
+| ------------------------------- | ------------------------------------------------------------------------- |
+| Listing-page conversion rate    | +15% among users who engage with AI panel vs. control                     |
+| Discovery-to-listing click rate | +10% for guided-selector users vs. keyword-search users                   |
+| Time-to-first-relevant-listing  | Reduction of >30% for guided-selector users                               |
+| AI panel engagement rate        | >25% of listing page visitors open and interact with the confidence panel |
+| Buyer satisfaction (CSAT)       | Meaningful improvement in post-purchase survey for guided-flow users      |
+| Return visit / save rate        | % of buyers who save a vehicle and return within 7 days                   |
 
 ---
 
@@ -92,23 +93,23 @@ The problem doesn't end at search. At every stage of the journey, the current ex
 
 ### 4.1 The Anxious First-Time Online Buyer
 
-| Attribute | Detail |
-|---|---|
-| **Profile** | 28–40 years old, has bought cars before but never online. Comfortable researching on desktop, hesitant to commit without seeing the car in person. |
-| **Primary Goal** | Find a reliable used car at a fair price without getting burned |
-| **Top Fears** | Overpaying. Hidden mechanical issues. Seller fraud. Shipping damage. |
-| **Behaviour** | Reads every review. Opens 8 tabs. Asks friends. Abandons cart. |
-| **How We Help** | Guided selector reduces early friction. Key signals on results page reduce cognitive load. AI panel replaces the 8-tab research spiral. |
+| Attribute        | Detail                                                                                                                                             |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Profile**      | 28–40 years old, has bought cars before but never online. Comfortable researching on desktop, hesitant to commit without seeing the car in person. |
+| **Primary Goal** | Find a reliable used car at a fair price without getting burned                                                                                    |
+| **Top Fears**    | Overpaying. Hidden mechanical issues. Seller fraud. Shipping damage.                                                                               |
+| **Behaviour**    | Reads every review. Opens 8 tabs. Asks friends. Abandons cart.                                                                                     |
+| **How We Help**  | Guided selector reduces early friction. Key signals on results page reduce cognitive load. AI panel replaces the 8-tab research spiral.            |
 
 ### 4.2 The Enthusiast / Specific-Model Buyer
 
-| Attribute | Detail |
-|---|---|
-| **Profile** | 25–45 years old, knows exactly what they want. Searching for a specific year/trim. May be cross-shopping 3–4 listings nationally. |
-| **Primary Goal** | Find the best specimen of a specific vehicle at the best price, even if it requires shipping |
-| **Top Fears** | Missing a better listing. Paying over market. Buying one with hidden rust or accident history. |
-| **Behaviour** | Searches by VIN, filters aggressively, reads forums for known issues before buying |
-| **How We Help** | Trim-level filtering gets them to relevant results faster. AI known-issues summary saves hours of forum research. |
+| Attribute        | Detail                                                                                                                            |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Profile**      | 25–45 years old, knows exactly what they want. Searching for a specific year/trim. May be cross-shopping 3–4 listings nationally. |
+| **Primary Goal** | Find the best specimen of a specific vehicle at the best price, even if it requires shipping                                      |
+| **Top Fears**    | Missing a better listing. Paying over market. Buying one with hidden rust or accident history.                                    |
+| **Behaviour**    | Searches by VIN, filters aggressively, reads forums for known issues before buying                                                |
+| **How We Help**  | Trim-level filtering gets them to relevant results faster. AI known-issues summary saves hours of forum research.                 |
 
 ---
 
@@ -139,16 +140,19 @@ Trust is not a single moment — it's built incrementally. Each stage should lea
 A fast, familiar search bar as the primary entry point — no cascading selector. The homepage serves two buyer types: those who know what they want (type it in) and those who don't yet (shortcut chips + trending listings give them a starting point).
 
 **Search bar:**
+
 - Single input, full-width, prominent
 - Handles natural language queries: "2019 Honda CR-V under $20k", "reliable SUV", "cheap F-150"
 - "Search Vehicles" CTA leads to results with query pre-applied
 
 **Shortcut chips (below search bar):**
+
 - 4–5 pre-built need-based queries: "Reliable under $15k", "Low mileage sedans", "Family SUVs", "First car under $10k"
 - Tap to populate search and go directly to results
 - Serves the needs-first buyer who doesn't know what make or model they want
 
 **Trending listings (below shortcuts):**
+
 - A curated row of listings surfaced by social proof: watcher count + save count, weighted over the past 7 days
 - Cards show photo, year/make/model, price, price badge, and watcher count ("47 watching")
 - Gives the undecided buyer something to browse before they've formed a query
@@ -167,12 +171,14 @@ A fast, familiar search bar as the primary entry point — no cascading selector
 A results page that surfaces enough context on each listing card to allow meaningful triage without clicking through.
 
 **Listing cards:**
+
 - Photo, year/make/model/trim, price, mileage, location, condition
 - **Price badge:** Below Market / Fair / Above Market (deterministic, based on mock market average)
 - **Mileage badge:** Low / Average / High (deterministic, year/mileage thresholds)
 - Seller feedback score as a visible trust signal
 
 **Filters:**
+
 - Price range, mileage, condition (new/used/salvage), distance, seller type (private/dealer)
 - Sort: Best Match, Price Low–High, Price High–Low, Mileage, Newest
 - Sidebar on desktop, bottom sheet on mobile
@@ -188,12 +194,14 @@ A results page that surfaces enough context on each listing card to allow meanin
 #### Feature 3: Vehicle Detail Page
 
 **Core content:**
+
 - Photo gallery with swipe (mobile) and keyboard nav (desktop)
 - Spec table: year, make, model, trim, mileage, condition, transmission, drivetrain, colour, VIN (masked)
 - Seller info: username, feedback score, location, member since
 - Price in market context: "X below / above market average for this year/make/model/trim"
 
 **Sticky summary panel:**
+
 - Persists as the user scrolls through the full listing
 - Shows: price verdict, mileage context, and a one-line AI teaser
 - "See full analysis" CTA expands the AI Confidence Panel
@@ -262,16 +270,16 @@ Plain-language price analysis comparing the listing against market average for t
 ### 7.1 Primary Flow: Search → AI Due Diligence
 
 1. User lands on homepage
-2a. **Knows what they want:** Types query into search bar (e.g. "2019 Honda CR-V under $20k") → taps Search
-2b. **Doesn't know yet:** Taps a shortcut chip (e.g. "Reliable under $15k") → goes to results with query pre-applied
-2c. **Just browsing:** Scrolls trending listings on homepage → taps a listing directly
-3. Results page: scans listing cards — price badge, mileage badge, watcher count enable quick triage
-4. Taps a listing → Vehicle Detail page
-5. Sticky summary panel visible immediately (no scrolling required) — shows price verdict + "See full analysis" CTA
-6. Taps "See full analysis" → AI Confidence Panel expands
-7. Reads known issues → price verdict → seller questions
-8. Taps "Contact Seller" → modal opens with AI questions pre-populated in the message body
-9. Sends message or saves listing (session only) — end of POC flow
+   2a. **Knows what they want:** Types query into search bar (e.g. "2019 Honda CR-V under $20k") → taps Search
+   2b. **Doesn't know yet:** Taps a shortcut chip (e.g. "Reliable under $15k") → goes to results with query pre-applied
+   2c. **Just browsing:** Scrolls trending listings on homepage → taps a listing directly
+2. Results page: scans listing cards — price badge, mileage badge, watcher count enable quick triage
+3. Taps a listing → Vehicle Detail page
+4. Sticky summary panel visible immediately (no scrolling required) — shows price verdict + "See full analysis" CTA
+5. Taps "See full analysis" → AI Confidence Panel expands
+6. Reads known issues → price verdict → seller questions
+7. Taps "Contact Seller" → modal opens with AI questions pre-populated in the message body
+8. Sends message or saves listing (session only) — end of POC flow
 
 ### 7.2 Secondary Flow: Trending → Detail
 
@@ -286,67 +294,67 @@ Plain-language price analysis comparing the listing against market average for t
 
 ### Stage 1: Discovery
 
-| ID | Requirement | Priority |
-|---|---|---|
-| VS-01 | Search bar must be the primary entry point on the homepage | P0 |
-| VS-02 | Shortcut chips (4–5 need-based queries) must be displayed below the search bar | P0 |
-| VS-03 | Tapping a shortcut chip must pre-populate the search and navigate to results | P0 |
-| VS-04 | Trending listings row must display below shortcuts, ranked by watcher + save count (7-day window) | P0 |
-| VS-05 | Listing cards in trending row must show watcher count as social proof signal | P1 |
-| VS-06 | Search query must persist on browser back navigation from results | P1 |
+| ID    | Requirement                                                                                       | Priority |
+| ----- | ------------------------------------------------------------------------------------------------- | -------- |
+| VS-01 | Search bar must be the primary entry point on the homepage                                        | P0       |
+| VS-02 | Shortcut chips (4–5 need-based queries) must be displayed below the search bar                    | P0       |
+| VS-03 | Tapping a shortcut chip must pre-populate the search and navigate to results                      | P0       |
+| VS-04 | Trending listings row must display below shortcuts, ranked by watcher + save count (7-day window) | P0       |
+| VS-05 | Listing cards in trending row must show watcher count as social proof signal                      | P1       |
+| VS-06 | Search query must persist on browser back navigation from results                                 | P1       |
 
 ### Stage 2: Evaluation
 
-| ID | Requirement | Priority |
-|---|---|---|
-| RP-01 | Results must render within 800ms of navigation (mock data) | P0 |
-| RP-02 | Each card must show: photo, year/make/model, price, mileage, location, condition | P0 |
-| RP-03 | Price badge (Below Market / Fair / Above Market) on every card | P0 |
-| RP-04 | Mileage badge (Low / Average / High) on every card | P0 |
-| RP-05 | Filter changes must update results without full page reload | P0 |
-| RP-06 | Empty state must be handled gracefully with suggested actions | P1 |
-| RP-07 | Results must paginate or infinite scroll — max 20 per page | P1 |
+| ID    | Requirement                                                                      | Priority |
+| ----- | -------------------------------------------------------------------------------- | -------- |
+| RP-01 | Results must render within 800ms of navigation (mock data)                       | P0       |
+| RP-02 | Each card must show: photo, year/make/model, price, mileage, location, condition | P0       |
+| RP-03 | Price badge (Below Market / Fair / Above Market) on every card                   | P0       |
+| RP-04 | Mileage badge (Low / Average / High) on every card                               | P0       |
+| RP-05 | Filter changes must update results without full page reload                      | P0       |
+| RP-06 | Empty state must be handled gracefully with suggested actions                    | P1       |
+| RP-07 | Results must paginate or infinite scroll — max 20 per page                       | P1       |
 
 ### Stage 3: Due Diligence
 
-| ID | Requirement | Priority |
-|---|---|---|
-| VD-01 | Sticky summary panel must be visible on page load without scrolling | P0 |
-| VD-02 | Photo gallery must support swipe (mobile) and keyboard nav (desktop) | P0 |
-| VD-03 | All vehicle specs must be in a structured table, not prose | P0 |
-| VD-04 | Price must be shown with market context ("$X below market average") | P0 |
-| VD-05 | Seller feedback score must be prominently displayed | P1 |
-| VD-06 | Page must be shareable via URL — state in route, not session | P1 |
-| AI-01 | AI panel must call Claude API on first expand; response cached server-side by listing ID | P0 |
-| AI-02 | API call must be server-side — key never exposed to client | P0 |
-| AI-03 | Panel must show loading state on first open while API call is in progress | P0 |
-| AI-04 | Panel must handle API errors gracefully — no broken UI | P0 |
-| AI-05 | Section order: (1) Known Issues, (2) Price Verdict, (3) Questions to Ask | P0 |
-| AI-06 | Price analysis must output one of three verdicts: Below Market / Fair / Above Market | P0 |
-| AI-07 | Known issues must include disclaimer: AI-generated, not a vehicle inspection | P1 |
-| AI-08 | Seller questions must be specific to the listing — not generic boilerplate | P1 |
-| AI-09 | Cached responses must be served instantly on subsequent opens — no loading state | P1 |
+| ID    | Requirement                                                                              | Priority |
+| ----- | ---------------------------------------------------------------------------------------- | -------- |
+| VD-01 | Sticky summary panel must be visible on page load without scrolling                      | P0       |
+| VD-02 | Photo gallery must support swipe (mobile) and keyboard nav (desktop)                     | P0       |
+| VD-03 | All vehicle specs must be in a structured table, not prose                               | P0       |
+| VD-04 | Price must be shown with market context ("$X below market average")                      | P0       |
+| VD-05 | Seller feedback score must be prominently displayed                                      | P1       |
+| VD-06 | Page must be shareable via URL — state in route, not session                             | P1       |
+| AI-01 | AI panel must call Claude API on first expand; response cached server-side by listing ID | P0       |
+| AI-02 | API call must be server-side — key never exposed to client                               | P0       |
+| AI-03 | Panel must show loading state on first open while API call is in progress                | P0       |
+| AI-04 | Panel must handle API errors gracefully — no broken UI                                   | P0       |
+| AI-05 | Section order: (1) Known Issues, (2) Price Verdict, (3) Questions to Ask                 | P0       |
+| AI-06 | Price analysis must output one of three verdicts: Below Market / Fair / Above Market     | P0       |
+| AI-07 | Known issues must include disclaimer: AI-generated, not a vehicle inspection             | P1       |
+| AI-08 | Seller questions must be specific to the listing — not generic boilerplate               | P1       |
+| AI-09 | Cached responses must be served instantly on subsequent opens — no loading state         | P1       |
 
 ### Stage 4: Commitment
 
-| ID | Requirement | Priority |
-|---|---|---|
-| SV-01 | Save button must store listing in session memory (cleared on refresh — no persistence required) | P1 |
-| SV-02 | Contact modal must pre-populate message body with AI-generated seller questions from panel Section 3 | P1 |
-| SV-03 | Saved listings view and nav item are out of scope for POC | — |
+| ID    | Requirement                                                                                          | Priority |
+| ----- | ---------------------------------------------------------------------------------------------------- | -------- |
+| SV-01 | Save button must store listing in session memory (cleared on refresh — no persistence required)      | P1       |
+| SV-02 | Contact modal must pre-populate message body with AI-generated seller questions from panel Section 3 | P1       |
+| SV-03 | Saved listings view and nav item are out of scope for POC                                            | —        |
 
 ---
 
 ## 9. Non-Functional Requirements
 
-| Requirement | Detail |
-|---|---|
-| Performance | Core Web Vitals: LCP < 2.5s, CLS < 0.1, FID < 100ms on 4G mobile |
-| Accessibility | WCAG 2.1 AA: keyboard navigable, screen reader compatible, sufficient colour contrast |
-| Responsiveness | Fully functional on mobile (375px+), tablet (768px+), desktop (1280px+) |
-| Security | Claude API key stored server-side only, never in client bundle or network requests |
-| Data | Mock data layer structured to mirror eBay Browse API response shape for clean swap |
-| Environment | Toggle between mock and live API via env var (`USE_MOCK_API=true/false`) |
+| Requirement    | Detail                                                                                |
+| -------------- | ------------------------------------------------------------------------------------- |
+| Performance    | Core Web Vitals: LCP < 2.5s, CLS < 0.1, FID < 100ms on 4G mobile                      |
+| Accessibility  | WCAG 2.1 AA: keyboard navigable, screen reader compatible, sufficient colour contrast |
+| Responsiveness | Fully functional on mobile (375px+), tablet (768px+), desktop (1280px+)               |
+| Security       | Claude API key stored server-side only, never in client bundle or network requests    |
+| Data           | Mock data layer structured to mirror eBay Browse API response shape for clean swap    |
+| Environment    | Toggle between mock and live API via env var (`USE_MOCK_API=true/false`)              |
 
 ---
 
@@ -354,15 +362,15 @@ Plain-language price analysis comparing the listing against market average for t
 
 ### 10.1 Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | SvelteKit (SSR for results/detail pages) |
-| UI Components | shadcn-svelte (bits-ui v2) |
-| Styling | Tailwind CSS |
-| AI | Claude API (Anthropic) — server-side only |
-| Data | Mock layer mirroring eBay Browse + Catalog API response shapes |
-| Deployment | Vercel (adapter-vercel) |
-| Future: Vehicle Data | eBay Browse API + Catalog API (swap via env var) |
+| Layer                | Technology                                                     |
+| -------------------- | -------------------------------------------------------------- |
+| Framework            | SvelteKit (SSR for results/detail pages)                       |
+| UI Components        | shadcn-svelte (bits-ui v2)                                     |
+| Styling              | Tailwind CSS                                                   |
+| AI                   | Claude API (Anthropic) — server-side only                      |
+| Data                 | Mock layer mirroring eBay Browse + Catalog API response shapes |
+| Deployment           | Vercel (adapter-vercel)                                        |
+| Future: Vehicle Data | eBay Browse API + Catalog API (swap via env var)               |
 
 ### 10.2 Data Layer
 
@@ -410,47 +418,53 @@ routes/api/
 
 ## 11. Open Questions & Risks
 
-| Risk | Detail |
-|---|---|
-| eBay API Approval | Production credentials pending. POC runs on mock data. Risk: low — mock is interview-sufficient. |
-| Claude API Latency | AI panel response ~1–3s. Streaming mitigates perceived wait. Loading state must be polished. |
-| AI Hallucination | Known issues could surface inaccurate info. Mitigation: disclaimer, structured prompt, no speculative claims. |
-| Mock Data Realism | Listings must feel real. Use real makes/models/prices (public domain) in mock layer. |
-| Badge Logic Accuracy | Price/mileage badges depend on realistic mock market averages. Seed mock data carefully. |
+| Risk                 | Detail                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| eBay API Approval    | Production credentials pending. POC runs on mock data. Risk: low — mock is interview-sufficient.              |
+| Claude API Latency   | AI panel response ~1–3s. Streaming mitigates perceived wait. Loading state must be polished.                  |
+| AI Hallucination     | Known issues could surface inaccurate info. Mitigation: disclaimer, structured prompt, no speculative claims. |
+| Mock Data Realism    | Listings must feel real. Use real makes/models/prices (public domain) in mock layer.                          |
+| Badge Logic Accuracy | Price/mileage badges depend on realistic mock market averages. Seed mock data carefully.                      |
 
 ---
 
 ## 12. POC Timeline
 
-| When | Deliverable |
-|---|---|
-| Saturday AM | Scaffold: SvelteKit + shadcn-svelte + Tailwind, mock data layer, API toggle |
-| Saturday PM | Homepage (guided selector) + Results page (cards + badges + filters) |
-| Sunday AM | Vehicle Detail page: gallery, spec table, sticky summary panel |
-| Sunday PM | AI Confidence Panel: Claude API, streaming, loading/error states + Contact modal |
-| Monday AM | Polish: responsive testing, copy review, demo rehearsal, narrative prep |
-| Monday (interview) | Live prototype + PM narrative |
+| When               | Deliverable                                                                      |
+| ------------------ | -------------------------------------------------------------------------------- |
+| Saturday AM        | Scaffold: SvelteKit + shadcn-svelte + Tailwind, mock data layer, API toggle      |
+| Saturday PM        | Homepage (guided selector) + Results page (cards + badges + filters)             |
+| Sunday AM          | Vehicle Detail page: gallery, spec table, sticky summary panel                   |
+| Sunday PM          | AI Confidence Panel: Claude API, streaming, loading/error states + Contact modal |
+| Monday AM          | Polish: responsive testing, copy review, demo rehearsal, narrative prep          |
+| Monday (interview) | Live prototype + PM narrative                                                    |
 
 ---
 
 ## 13. Appendix — PM Interview Framing
 
 ### The Problem Framing
+
 > "eBay has a trust problem in Vehicles — not just at the listing page, but across the entire journey. Buyers can find cars, but they can't confidently evaluate them. We lose them at every stage: at search because there's no sense of what's popular or available, at results because there's no triage signal, and at the listing because there's no framework for making a decision. The fix isn't one big feature — it's progressive trust built at each stage."
 
 ### The Product Decision
+
 > "I deliberately chose not to rebuild discovery from scratch. eBay already has search — buyers know how to use it. What it's missing is context: social proof on the homepage so buyers can see what's trending, shortcut chips so needs-first buyers don't need to know the year and make before they can start, and price and mileage signals on every card so triage happens before you click. Those are low-effort, high-ROI interventions. The AI Confidence Panel is the centrepiece, but it only lands if the buyer already feels oriented by the time they get there."
 
 ### The AI Justification
+
 > "AI isn't a novelty here — it's the right tool for a specific job. The panel leads with known issues because that's the first question a first-time buyer actually has — not 'is the price fair?' but 'is this car going to break on me?' No other platform answers that at the listing level. Price verdict follows naturally, and the seller questions give the buyer a clear action. We're collapsing hours of forum research into a 10-second interaction at the moment it matters most. And we cache the result per listing — so the second buyer to view it gets it instantly."
 
 ### The Two-Sided Marketplace Acknowledgement
+
 > "This is a buyer-side prototype, but every decision is made with the seller in mind. We deliberately didn't surface listing completeness scores or penalise sellers for sparse descriptions. The AI panel works with whatever data the seller provides — more detail produces more specific questions, but it never labels a seller as 'incomplete'. Seller participation is the inventory side of this marketplace, and we protect it."
 
 ### The Data Acknowledgement
+
 > "I don't have eBay's internal conversion data. What I have is strong public signal — Cox Automotive, J.D. Power, CarFax's entire business model — all pointing to trust and confidence as the primary barrier. If I were in the role, the first thing I'd do is pull drop-off rates at each stage of the funnel and run a buyer survey. The prototype is built on that hypothesis, and I'd want to invalidate it fast if the data said otherwise."
 
 ### What I'd Do Next
+
 - Instrument every stage with analytics: shortcut chip usage, trending listing click rate, badge interaction, panel open rate, contact CTA click
 - Run a usability study with 5 vehicle buyers — specifically recruit a mix of Persona 1 (needs-first) and Persona 2 (model-specific) buyers
 - Define a clear A/B test: search + confidence layer vs. current eBay Vehicles experience
