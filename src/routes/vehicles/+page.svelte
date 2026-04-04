@@ -140,7 +140,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.query ? `${data.query} — Vehicles` : 'Browse Vehicles'}</title>
+	<title>{data.query ? `${data.query} — Vehicles` : 'Explore Vehicles'}</title>
 </svelte:head>
 
 <div class="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
