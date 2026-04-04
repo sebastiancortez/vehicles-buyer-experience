@@ -71,6 +71,13 @@ Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete.
 
 ---
 
+## Environment
+
+- Local secrets live in the repo-root `.env` file.
+- Add `OPENAI_API_KEY` to `.env` for the AI confidence route.
+
+---
+
 ## Slice 1 — Foundation: Mock data, types, shadcn-svelte, layout shell
 
 
@@ -98,7 +105,10 @@ Establish the data contract, shared UI primitives, and app shell that every othe
   - 20 realistic listings with real makes/models/prices (public domain data)
   - Mix of private sellers (sparse 1–2 sentence descriptions) and dealers (detailed descriptions with service history)
   - Hardcoded `priceBadge`, `mileageBadge`, `watcherCount`, `saveCount` per listing
-  - 2–3 deliberately distinct listings for AI demo variance: one high mileage, one suspiciously cheap, one with condition "Good" and no explanation
+  - Deliberate scenario coverage should map to the 2 buyer personas:
+    - **Needs-first buyer**: listings that support shortcut-chip journeys like "Reliable under $15k", "Low mileage sedans", "Family SUVs", "First car under $10k", and "Trucks under $20k"
+    - **Model-specific buyer**: listings for buyers who already know the year/make/model/trim they want and are comparing detail, price fairness, mileage, and seller quality
+  - Include enough variance inside each persona bucket for AI demo value: suspiciously cheap listing, salvage/rebuilt-title listing, premium-but-overpriced dealer listing, budget commuter, family SUV, truck, EV, and enthusiast car
   - Realistic photo URLs (use placeholder images or real stock photo URLs)
 - **Data access layer** in `src/lib/api/index.ts`:
   - Exports mock-backed listing accessors used by loaders and server routes
@@ -147,7 +157,7 @@ None directly — this is scaffolding. All subsequent slices depend on it.
 |                |             |
 | -------------- | ----------- |
 | **Blocked by** | Slice 1     |
-| **Status**     | Not started |
+| **Status**     | In progress |
 
 
 ### What to build
@@ -225,10 +235,14 @@ The evaluation stage — a results page where price and mileage badges enable qu
 - **Sort**:
   - Best Match, Price Low–High, Price High–Low, Mileage, Newest
   - Dropdown or toggle group
+  - In mock mode, define **Best Match** explicitly as: query relevance first, then `priceBadge` preference (`below_market` > `fair` > `above_market`), then watcherCount + saveCount as a tiebreaker
 - **Empty state**:
   - Graceful message with suggested actions (broaden search, try a shortcut chip)
 - **Pagination**:
   - Max 20 listings per page, simple pagination controls
+- **Query semantics**:
+  - `?q=` is always preserved in the URL
+  - Shortcut chips may start as plain text queries, but if a chip implies structure (for example "Reliable under $15k"), map it into URL-backed filters as part of the results-page implementation so the behavior is deterministic and testable
 
 ### File map
 
@@ -329,28 +343,36 @@ VD-01, VD-02, VD-03, VD-04, VD-05, VD-06
 
 ### What to build
 
-The centrepiece — an expandable AI panel on the detail page that synthesises known issues, price verdict, and seller questions. Cached per listing so every buyer after the first gets instant results.
+The centrepiece — an expandable AI panel on the detail page that synthesises known issues, price verdict, and seller questions. On the first uncached request it should generate and stream the analysis so the POC feels responsive, then cache the completed result for later opens in the same running app instance.
 
 ### Scope
 
 - **Server route** at `/api/confidence/[id]/+server.ts`:
   - GET handler that accepts a listing ID
   - Fetches listing data from mock API
-  - Assembles structured prompt from listing fields (year, make, model, trim, mileage, condition, price, marketAverage, description, sellerType)
+  - Accepts the current search query as optional input (for example `?q=` carried from the results page) so the analysis can emphasize what the buyer likely cares about while still covering general due diligence
+  - Assembles structured prompt from listing fields (year, make, model, trim, mileage, condition, price, marketAverage, description, sellerType) plus the user search query when present
   - Calls the OpenAI API using `gpt-5.4-mini` by default (server-side only — `OPENAI_API_KEY` env var)
-  - Caches response in-memory by listing ID (Map or similar); returns cached response on subsequent requests instantly
-  - Returns JSON with three sections: `knownIssues`, `priceVerdict`, `questionsToAsk`
+  - Streams the first uncached response to the client, then caches the completed result in-memory by listing ID
+  - Returns cached response on subsequent requests instantly within the same running app instance
+  - Returns JSON with an explicit contract:
+    - `knownIssues`: array of 2–5 strings
+    - `priceVerdict`: object with `label` (`below_market` | `fair` | `above_market`) and `reasoning` (2–3 sentences)
+    - `questionsToAsk`: array of 4–6 strings
+    - `buyerIntent`: optional short string summarising how the user query shaped the analysis
   - Graceful error handling: returns structured error, never exposes API key or raw error
 - `**ConfidencePanel.svelte` in `src/lib/components/`:
   - Expandable panel on the detail page, triggered by "See full analysis" CTA in StickyPanel
-  - On expand: fetches `/api/confidence/[id]`
+  - On expand: fetches `/api/confidence/[id]`, including the current `q` value when available
   - **Section 1 — Known Issues**: reliability concerns for this year/make/model/trim. Includes disclaimer: "AI-generated analysis — not a vehicle inspection."
   - **Section 2 — Price Verdict**: Below Market / Fair / Above Market with 2–3 sentences of reasoning
   - **Section 3 — Questions to Ask the Seller**: 4–6 specific questions derived from listing data
-  - Loading skeleton on first open
+  - Streaming-first render on first open, with loading skeleton only before the first chunk arrives
   - Instant render when cached (no loading state)
+  - Optional buyer-intent subhead when a search query is present, such as "Focused on reliability under $15k"
   - Error state: friendly message, no broken UI
 - **Prompt engineering**: the prompt must produce consistently useful output across listings with varied data quality (sparse private seller vs. detailed dealer)
+  - The prompt should balance user intent against general due diligence: prioritize what the user searched for without ignoring title status, maintenance risk, pricing, and seller transparency
 
 ### File map
 
@@ -365,12 +387,14 @@ src/lib/components/
 
 - Expanding the panel on the detail page triggers a fetch to `/api/confidence/[id]`
 - API call is server-side only — `OPENAI_API_KEY` never in client bundle or network tab
-- Loading skeleton shows on first open while API responds
+- On the first uncached open, the panel begins rendering via streaming once content starts arriving
+- Loading skeleton shows only until the first streamed content arrives
 - Panel renders 3 sections in order: Known Issues → Price Verdict → Questions to Ask
 - Known Issues section includes AI disclaimer
 - Price verdict shows one of three verdicts with plain-language reasoning
 - Seller questions are specific to the listing (not generic boilerplate) — verifiable by comparing 2–3 different listings
-- Second open of the same listing returns instantly (cached, no loading state)
+- When `q` is present, the analysis reflects that user intent in a visible but lightweight way
+- Second open of the same listing returns instantly within the same running app instance (cached, no loading state)
 - API error produces a graceful fallback, not a broken UI
 - Panel is responsive across all breakpoints
 
@@ -407,6 +431,8 @@ The bridge from analysis to action — a contact modal with AI-generated questio
   - Cleared on page refresh — no localStorage, no persistence
   - Visual indicator when a listing is saved (filled icon)
 - **State flow**: AI panel questions → passed as prop or store → ContactModal reads them on open
+- **Fallback behavior**:
+  - If AI questions are unavailable because analysis has not run yet or the request failed, the modal still opens with a sensible default template and a CTA to generate or retry AI questions
 
 ### File map
 
@@ -421,6 +447,7 @@ src/lib/stores/
 
 - "Contact Seller" CTA opens a modal
 - Modal message body is pre-populated with the AI-generated seller questions from panel Section 3
+- If AI content is unavailable, the modal falls back to a default contact template instead of blocking the user
 - Save button toggles saved state visually (e.g. filled/unfilled icon)
 - Saved state persists across page navigation within the session
 - Saved state clears on page refresh
