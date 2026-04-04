@@ -102,7 +102,7 @@
 			if (isOpen && (phase === 'closed' || phase === 'closing')) {
 				previouslyFocused = document.activeElement as HTMLElement;
 				phase = 'opening';
-				document.body.style.overflow = 'hidden';
+				if (isMobile) document.body.style.overflow = 'hidden';
 				rafId = requestAnimationFrame(() => {
 					rafId = requestAnimationFrame(() => {
 						phase = 'open';
@@ -253,9 +253,10 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if inDOM}
-	<!-- Backdrop -->
+	<!-- Backdrop: transparent on desktop (listing stays readable), tinted on mobile -->
 	<button
-		class="drawer-backdrop fixed inset-0 z-40 {isShown ? 'opacity-100' : 'opacity-0'}"
+		class="fixed inset-0 z-40 transition-opacity duration-[380ms] ease-[cubic-bezier(0.16,1,0.3,1)] {isShown ? 'opacity-100' : 'opacity-0'}
+			{isMobile ? 'drawer-backdrop-mobile' : 'drawer-backdrop-desktop'}"
 		onclick={onclose}
 		tabindex="-1"
 		aria-label="Close drawer"
@@ -467,16 +468,17 @@
 {/if}
 
 <style>
-	.drawer-backdrop {
-		background: oklch(18% 0.015 258 / 0.25);
-		backdrop-filter: blur(3px);
-		transition:
-			opacity 380ms cubic-bezier(0.16, 1, 0.3, 1);
+	.drawer-backdrop-desktop {
+		background: oklch(18% 0.015 258 / 0.06);
+	}
+
+	.drawer-backdrop-mobile {
+		background: oklch(18% 0.015 258 / 0.35);
+		backdrop-filter: blur(2px);
 	}
 
 	.drawer-panel {
-		transition:
-			transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
 	.thread-msg {
@@ -495,7 +497,8 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.drawer-backdrop,
+		.drawer-backdrop-desktop,
+		.drawer-backdrop-mobile,
 		.drawer-panel {
 			transition-duration: 0ms;
 		}
