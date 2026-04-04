@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { page } from '$app/state';
+	import { tick } from 'svelte';
 	import SignalBadge from '$lib/components/SignalBadge.svelte';
 	import StickyPanel from '$lib/components/StickyPanel.svelte';
+	import ConfidencePanel from '$lib/components/ConfidencePanel.svelte';
 	import {
 		ChevronLeft,
 		ChevronRight,
@@ -17,6 +20,8 @@
 
 	let { data }: { data: PageData } = $props();
 	const listing = $derived(data.listing);
+	const searchQuery = $derived(page.url.searchParams.get('q') || undefined);
+	let panelExpanded = $state(false);
 
 	/* ── Gallery state ── */
 	let activeIndex = $state(0);
@@ -111,10 +116,13 @@
 	]);
 
 	function scrollToAnalysis() {
-		const confidencePanelEl = document.getElementById('confidence-panel');
-		if (confidencePanelEl) {
-			confidencePanelEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-		}
+		panelExpanded = true;
+		tick().then(() => {
+			document.getElementById('confidence-panel')?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start'
+			});
+		});
 	}
 </script>
 
@@ -132,7 +140,7 @@
 <div class="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
 	<div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6 lg:px-8">
 		<a
-			href="/vehicles"
+			href="/vehicles{searchQuery ? `?q=${encodeURIComponent(searchQuery)}` : ''}"
 			class="flex items-center gap-1.5 text-[0.8rem] font-medium text-[var(--color-text-secondary)] transition-colors duration-200 hover:text-[var(--color-foreground)]"
 		>
 			<ArrowLeft size={15} />
@@ -408,9 +416,9 @@
 				</div>
 			</div>
 
-			<!-- AI Confidence Panel anchor (Slice 5 will render here) -->
+			<!-- AI Confidence Panel -->
 			<div id="confidence-panel" class="mt-10">
-				<!-- ConfidencePanel.svelte will be composed here in Slice 5 -->
+				<ConfidencePanel {listing} {searchQuery} bind:expanded={panelExpanded} />
 			</div>
 
 			<!-- Bottom spacer for mobile sticky bar -->
