@@ -1,10 +1,14 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { ConfidencePayload } from '$lib/types/confidence';
 	import { page } from '$app/state';
 	import { tick } from 'svelte';
 	import SignalBadge from '$lib/components/SignalBadge.svelte';
 	import StickyPanel from '$lib/components/StickyPanel.svelte';
 	import ConfidencePanel from '$lib/components/ConfidencePanel.svelte';
+	import ConfidenceDrawer from '$lib/components/ConfidenceDrawer.svelte';
+	import ContactModal from '$lib/components/ContactModal.svelte';
+	import { isSaved, toggleSaved } from '$lib/stores/saved.svelte';
 	import {
 		ChevronLeft,
 		ChevronRight,
@@ -22,6 +26,31 @@
 	const listing = $derived(data.listing);
 	const searchQuery = $derived(page.url.searchParams.get('q') || undefined);
 	let panelExpanded = $state(false);
+
+	/* ── Slice 6: contact + save state ── */
+	let isContactModalOpen = $state(false);
+	let currentAnalysis = $state<ConfidencePayload | null>(null);
+	const analysisReady = $derived(currentAnalysis !== null);
+	const listingSaved = $derived(isSaved(listing.id));
+
+	function handleAnalysisLoaded(a: ConfidencePayload) {
+		currentAnalysis = a;
+	}
+
+	function openContactModal() {
+		isContactModalOpen = true;
+	}
+
+	/* ── Slice 7: chat drawer state ── */
+	let isDrawerOpen = $state(false);
+
+	function openDrawer() {
+		isDrawerOpen = true;
+	}
+
+	function closeDrawer() {
+		isDrawerOpen = false;
+	}
 
 	/* ── Gallery state ── */
 	let activeIndex = $state(0);
@@ -418,7 +447,14 @@
 
 			<!-- AI Confidence Panel -->
 			<div id="confidence-panel" class="mt-10">
-				<ConfidencePanel {listing} {searchQuery} bind:expanded={panelExpanded} />
+				<ConfidencePanel
+					{listing}
+					{searchQuery}
+					bind:expanded={panelExpanded}
+					onAnalysisLoaded={handleAnalysisLoaded}
+					onContactSeller={openContactModal}
+					onchatopen={openDrawer}
+				/>
 			</div>
 
 			<!-- Bottom spacer for mobile sticky bar -->
@@ -426,6 +462,30 @@
 		</div>
 
 		<!-- Right column: StickyPanel (desktop) -->
-		<StickyPanel {listing} onAnalysisClick={scrollToAnalysis} />
+		<StickyPanel
+			{listing}
+			onAnalysisClick={scrollToAnalysis}
+			{analysisReady}
+			onContactSellerClick={openContactModal}
+			saved={listingSaved}
+			onSaveToggle={() => toggleSaved(listing.id)}
+		/>
 	</div>
 </div>
+
+<!-- Contact Modal (Slice 6) -->
+<ContactModal
+	bind:open={isContactModalOpen}
+	{listing}
+	analysis={currentAnalysis}
+	buyerIntent={searchQuery}
+/>
+
+<!-- Chat Drawer (Slice 7) -->
+<ConfidenceDrawer
+	open={isDrawerOpen}
+	{listing}
+	analysis={currentAnalysis}
+	{searchQuery}
+	onclose={closeDrawer}
+/>

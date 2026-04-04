@@ -486,7 +486,7 @@ SV-01, SV-02
 
 ---
 
-## Slice 7 — Listing Q&A: Follow-up questions inside the AI assessment surface
+## Slice 7 — Listing Q&A: Follow-up questions in a dedicated drawer surface
 
 
 |                |             |
@@ -497,7 +497,7 @@ SV-01, SV-02
 
 ### What to build
 
-Add a lightweight, listing-grounded follow-up Q&A experience inside the same UI surface as the AI Confidence Panel. The structured assessment remains the first thing the buyer sees; chat is the "go deeper" layer for follow-up questions such as red flags, maintenance risk, fit for a use case, or clarification on the seller questions.
+Add a lightweight, listing-grounded follow-up Q&A experience in a dedicated drawer or sheet that opens from the AI Confidence Panel. The structured assessment remains the first thing the buyer sees in the main page flow; chat is the adjacent "go deeper" layer for follow-up questions such as red flags, maintenance risk, fit for a use case, or clarification on seller questions.
 
 ### Scope
 
@@ -515,8 +515,8 @@ Add a lightweight, listing-grounded follow-up Q&A experience inside the same UI 
     - optional `suggestedPrompts` for the next turn
   - The route may reuse the confidence cache or confidence payload as input, but it must stay stateless with respect to session history
 - **UX integration**:
-  - Keep the structured AI Confidence Panel as the top of the surface
-  - Add an embedded "Ask about this listing" area below the assessment, not a separate page or disconnected widget
+  - Keep the structured AI Confidence Panel in the main detail page flow as the primary read-only research artifact
+  - Add an "Ask about this listing" entry point at the bottom of the assessment that opens a dedicated drawer on desktop and full-screen sheet on mobile
   - Include 3–4 starter prompts such as:
     - "What are the biggest red flags here?"
     - "What should I confirm with the seller?"
@@ -530,13 +530,15 @@ Add a lightweight, listing-grounded follow-up Q&A experience inside the same UI 
     - the buyer's original search query when available
   - Position the feature as listing guidance, not general car advice or a chatbot
   - Clear disclaimer that AI guidance is not a vehicle inspection or professional mechanic review
+  - Closing the drawer preserves the current listing's chat history for the session
 - **Server route**:
   - Add a server-only route for listing-grounded Q&A
   - Accepts listing id, user message, and recent thread context
   - Uses the same core listing facts and confidence context as Slice 5 so there is one intelligence foundation rather than duplicate prompt systems
   - Returns concise, grounded answers and optional suggested next questions
 - **State flow**:
-  - Chat lives in the same component surface as the assessment, but remains logically separate from the seller contact modal
+  - Assessment state and chat state remain independent
+  - Chat opens in a separate drawer surface, but remains logically connected to the same listing and assessment context
   - Chat context may later be consumed by the contact flow, but seller questions must not depend on chat to function
 
 ### File map
@@ -545,7 +547,8 @@ Add a lightweight, listing-grounded follow-up Q&A experience inside the same UI 
 src/routes/api/confidence-chat/[id]/
   +server.ts                ← Listing-grounded follow-up Q&A route
 src/lib/components/
-  ConfidencePanel.svelte    ← Extended to include embedded follow-up Q&A
+  ConfidencePanel.svelte    ← Assessment surface with chat entry point
+  ConfidenceDrawer.svelte   ← Drawer or mobile sheet for follow-up Q&A
 src/lib/types/
   confidence.ts             ← Shared confidence + Q&A payload types
 ```
@@ -553,17 +556,17 @@ src/lib/types/
 ### Acceptance criteria
 
 - The AI Confidence Panel still opens with the structured 3-section assessment first
-- The same panel surface includes an "Ask about this listing" follow-up area below the assessment
+- The confidence panel includes an "Ask about this listing" trigger that opens a dedicated Q&A drawer or sheet
 - Buyers can ask at least one follow-up question and receive a listing-grounded response
 - Starter prompts are available to reduce blank-state friction
 - Responses are clearly grounded in the listing and assessment context, not generic automotive advice
 - Conversation history persists while the user remains in the current session for that listing
-- The Q&A experience is responsive and does not break the assessment layout on mobile
+- The Q&A experience is responsive and does not break the assessment layout on mobile or desktop
 - If the Q&A request fails, the assessment remains usable and the chat area shows a graceful retry state
 
 ### Product rules
 
-- Assessment and follow-up Q&A share one trust-building surface
+- Assessment and follow-up Q&A are one connected trust-building experience, but not one scroll container
 - Seller contact remains a separate action flow
 - Chat may improve seller-question generation later, but must not be required for due-diligence questions to exist
 
@@ -653,4 +656,3 @@ Agents append entries here when a slice is completed or partially completed. New
 ```markdown
 - **2026-04-03** — Summary: shadcn-svelte init, `listing.ts` + 20 mock listings, `ListingCard` + `SignalBadge`, nav shell in `+layout.svelte`. Files: `src/lib/api/mock.ts`, `src/lib/components/ListingCard.svelte`. Caveat: placeholder images only.
 ```
-

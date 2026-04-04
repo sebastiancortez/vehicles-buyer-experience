@@ -2,43 +2,22 @@ import OpenAI from 'openai';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { getListing } from '$lib/api';
+import {
+	buildConfidenceCacheKey,
+	CONFIDENCE_MODEL as MODEL,
+	CONFIDENCE_PROMPT_VERSION as PROMPT_VERSION,
+	errorResponse,
+	getCachedConfidenceAnalysis,
+	normalizeOptionalQuery,
+	normalizeString,
+	normalizeStringArray,
+	setCachedConfidenceAnalysis
+} from '$lib/server/confidence';
 import type {
-	AIError,
-	ConfidenceCacheKey,
 	ConfidencePayload,
 	ConfidenceResponse
 } from '$lib/types/confidence';
 import type { Listing } from '$lib/types/listing';
-
-const MODEL = 'gpt-5.4-mini';
-const PROMPT_VERSION = 'confidence-v1';
-const CACHE = new Map<ConfidenceCacheKey, ConfidencePayload>();
-
-const QUERY_STOP_WORDS = new Set([
-	'a',
-	'an',
-	'and',
-	'car',
-	'cars',
-	'for',
-	'first',
-	'me',
-	'my',
-	'of',
-	'or',
-	'reliable',
-	'the',
-	'to',
-	'under',
-	'with'
-]);
-
-const QUERY_ALIASES: Record<string, string> = {
-	sedans: 'sedan',
-	suvs: 'suv',
-	trucks: 'truck',
-	evs: 'ev'
-};
 
 const CONFIDENCE_SCHEMA = {
 	name: 'confidence_analysis',
@@ -103,8 +82,8 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	}
 
 	const query = normalizeOptionalQuery(url.searchParams.get('q'));
-	const cacheKey = buildCacheKey(listingId, query);
-	const cached = CACHE.get(cacheKey);
+	const cacheKey = buildConfidenceCacheKey(listingId, query);
+	const cached = getCachedConfidenceAnalysis(listingId, query);
 
 	if (cached) {
 		return json(successResponse(listing, cached, true));
@@ -148,7 +127,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			);
 		}
 
-		CACHE.set(cacheKey, parsed);
+		setCachedConfidenceAnalysis(listingId, query, parsed);
 
 		return json(successResponse(listing, parsed, false));
 	} catch (error) {
@@ -288,80 +267,6 @@ function isConfidenceModelShape(value: unknown): value is {
 	);
 }
 
-function normalizeStringArray(values: unknown[]): string[] {
-	return Array.from(
-		new Set(values.map((value) => normalizeString(value)).filter((value): value is string => Boolean(value)))
-	);
-}
-
-function normalizeString(value: unknown): string | null {
-	if (typeof value !== 'string' && !(value instanceof String)) return null;
-
-	const normalized = value
-		.toString()
-		.replace(/\s+/g, ' ')
-		.trim();
-
-	return normalized.length ? normalized : null;
-}
-
-function normalizeOptionalQuery(query: string | null | undefined): string | null {
-	if (!query) return null;
-
-	const normalized = query
-		.normalize('NFKC')
-		.replace(/\s+/g, ' ')
-		.trim();
-
-	return normalized.length ? normalized : null;
-}
-
-function buildCacheKey(listingId: string, query: string | null): ConfidenceCacheKey {
-	return [
-		'confidence',
-		PROMPT_VERSION,
-		MODEL,
-		listingId,
-		query ? serializeQuerySemantics(query) : 'q:none'
-	].join(':');
-}
-
-function serializeQuerySemantics(query: string): string {
-	const lowered = query.toLowerCase();
-	const maxPrice = extractMaxPrice(lowered);
-	const lowMileage = /\blow\s+mileage\b/.test(lowered);
-	const normalizedTerms = Array.from(
-		new Set(
-			lowered
-				.replace(/[^a-z0-9$\s]/g, ' ')
-				.split(/\s+/)
-				.map((token) => QUERY_ALIASES[token] ?? token)
-				.filter((token) => token && !QUERY_STOP_WORDS.has(token))
-		)
-	).sort();
-
-	return JSON.stringify({
-		maxPrice,
-		lowMileage,
-		terms: normalizedTerms
-	});
-}
-
-function extractMaxPrice(query: string): number | null {
-	const match = query.match(/under\s+\$(\d{1,3})(?:,?(\d{3}))?\s*(k)?/i);
-	if (!match) return null;
-
-	const whole = match[1];
-	const suffix = match[2] ?? '';
-	let value = Number.parseInt(`${whole}${suffix}`, 10);
-
-	if (match[3] && value < 1000) {
-		value *= 1000;
-	}
-
-	return Number.isFinite(value) ? value : null;
-}
-
 function successResponse(
 	listing: Listing,
 	analysis: ConfidencePayload,
@@ -384,21 +289,4 @@ function successResponse(
 		},
 		analysis
 	};
-}
-
-function errorResponse(
-	status: number,
-	code: AIError['error']['code'],
-	message: string
-) {
-	return json(
-		{
-			ok: false,
-			error: {
-				code,
-				message
-			}
-		} satisfies AIError,
-		{ status }
-	);
 }

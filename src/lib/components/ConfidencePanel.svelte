@@ -11,16 +11,27 @@
 		MessageCircleQuestion,
 		RotateCcw,
 		AlertCircle,
-		Search
+		Search,
+		Mail
 	} from 'lucide-svelte';
 
 	interface Props {
 		listing: Listing;
 		searchQuery?: string;
 		expanded?: boolean;
+		onAnalysisLoaded?: (analysis: ConfidencePayload) => void;
+		onContactSeller?: () => void;
+		onchatopen?: () => void;
 	}
 
-	let { listing, searchQuery, expanded = $bindable(false) }: Props = $props();
+	let {
+		listing,
+		searchQuery,
+		expanded = $bindable(false),
+		onAnalysisLoaded,
+		onContactSeller,
+		onchatopen
+	}: Props = $props();
 
 	type DataState = 'idle' | 'loading' | 'ready' | 'error';
 	let dataState = $state<DataState>('idle');
@@ -76,6 +87,7 @@
 				if (res.status === 404) {
 					analysis = getMockAnalysis();
 					dataState = 'ready';
+					onAnalysisLoaded?.(analysis);
 					return;
 				}
 				const err = await res.json().catch(() => null);
@@ -88,6 +100,7 @@
 			if (data.ok) {
 				analysis = data.analysis;
 				dataState = 'ready';
+				onAnalysisLoaded?.(data.analysis);
 			} else {
 				errorMessage = data.error?.message || 'Analysis unavailable right now.';
 				dataState = 'error';
@@ -95,6 +108,7 @@
 		} catch {
 			analysis = getMockAnalysis();
 			dataState = 'ready';
+			onAnalysisLoaded?.(analysis);
 		}
 	}
 
@@ -430,6 +444,24 @@
 							{/each}
 						</ol>
 					</section>
+
+					<!-- Action row -->
+					<div class="mt-8 flex flex-col gap-3 section-reveal" style="animation-delay: 360ms">
+						<button
+							onclick={onchatopen}
+							class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-3 text-[0.825rem] font-semibold text-[var(--color-foreground)] transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[var(--color-secondary)] active:scale-[0.98]"
+						>
+							<MessageCircleQuestion size={15} />
+							Ask about this listing
+						</button>
+						<button
+							onclick={onContactSeller}
+							class="flex w-full items-center justify-center gap-2.5 rounded-xl bg-[var(--color-foreground)] px-5 py-3 text-[0.825rem] font-semibold text-[var(--color-background)] transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[var(--color-text)] active:scale-[0.98]"
+						>
+							<Mail size={15} />
+							Draft message to seller
+						</button>
+					</div>
 				</div>
 			{:else}
 				<div class="h-0"></div>

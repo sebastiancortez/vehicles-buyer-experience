@@ -1,5 +1,7 @@
 # Slice 5-7 Frontend Spec
 
+Superseded for Slice 6-7 UX by `docs/slice-6-7-chat-drawer-spec.md`. Keep this document only as historical reference for confidence-panel state guidance and query-propagation rules where they are not restated elsewhere.
+
 This document is the frontend/UI contract for the AI confidence surface, embedded follow-up Q&A, and seller-contact handoff.
 
 It is intentionally separate from the backend/API spec so two agents can work in parallel:
@@ -292,4 +294,3 @@ Recommended order:
 3. Build the embedded Q&A thread against mocks.
 4. Build the contact modal against assessment output.
 5. Wire the real routes in once the backend track is ready.
-
