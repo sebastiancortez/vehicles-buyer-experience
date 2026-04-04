@@ -2,50 +2,51 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-/* ─── Design System — "Clean Commerce" ─────────────────────────────────── */
-/* Inspired by Shop (Shopify): clean, warm, trustworthy.                    */
-/* Single font, cool-warm neutrals, sage green primary, generous radii.     */
+/* ─── Design System — "Modern Commerce" ────────────────────────────────── */
+/* Inspired by Shop + eBay: clean, airy, confident blue accent.             */
+/* Plus Jakarta Sans, blue-tinted neutrals, generous radii, lots of air.    */
 
 @theme {
 	/* Typography */
 	--font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
 	/* ─── shadcn-svelte semantic tokens ─── */
-	--color-background: oklch(98.5% 0.003 260);
-	--color-foreground: oklch(15% 0.01 260);
+	--color-background: oklch(97.5% 0.004 258);
+	--color-foreground: oklch(18% 0.015 258);
 
-	--color-card: oklch(100% 0 0);
-	--color-card-foreground: oklch(15% 0.01 260);
+	--color-card: oklch(99.5% 0.002 258);
+	--color-card-foreground: oklch(18% 0.015 258);
 
-	--color-popover: oklch(100% 0 0);
-	--color-popover-foreground: oklch(15% 0.01 260);
+	--color-popover: oklch(99.5% 0.002 258);
+	--color-popover-foreground: oklch(18% 0.015 258);
 
-	--color-primary: oklch(48% 0.115 160);
-	--color-primary-foreground: oklch(98% 0.005 160);
+	--color-primary: oklch(52% 0.24 264);
+	--color-primary-foreground: oklch(99% 0.005 264);
 
-	--color-secondary: oklch(96% 0.004 260);
-	--color-secondary-foreground: oklch(25% 0.01 260);
+	--color-secondary: oklch(95.5% 0.008 258);
+	--color-secondary-foreground: oklch(28% 0.015 258);
 
-	--color-muted: oklch(96% 0.004 260);
-	--color-muted-foreground: oklch(55% 0.008 260);
+	--color-muted: oklch(95.5% 0.008 258);
+	--color-muted-foreground: oklch(55% 0.012 258);
 
-	--color-accent: oklch(96% 0.004 260);
-	--color-accent-foreground: oklch(25% 0.01 260);
+	--color-accent: oklch(95.5% 0.008 258);
+	--color-accent-foreground: oklch(28% 0.015 258);
 
 	--color-destructive: oklch(55% 0.2 25);
 
-	--color-border: oklch(92% 0.004 260);
-	--color-input: oklch(92% 0.004 260);
-	--color-ring: oklch(48% 0.115 160);
+	--color-border: oklch(91.5% 0.006 258);
+	--color-input: oklch(91.5% 0.006 258);
+	--color-ring: oklch(52% 0.24 264);
 
 	/* ─── Extended palette ─── */
-	--color-surface: oklch(100% 0 0);
-	--color-surface-raised: oklch(100% 0 0);
-	--color-text: oklch(15% 0.01 260);
-	--color-text-secondary: oklch(48% 0.008 260);
-	--color-text-tertiary: oklch(62% 0.006 260);
-	--color-border-hover: oklch(84% 0.008 260);
-	--color-primary-light: oklch(96% 0.025 160);
+	--color-surface: oklch(99.5% 0.002 258);
+	--color-surface-raised: oklch(99.5% 0.002 258);
+	--color-text: oklch(18% 0.015 258);
+	--color-text-secondary: oklch(46% 0.012 258);
+	--color-text-tertiary: oklch(60% 0.008 258);
+	--color-border-hover: oklch(83% 0.012 258);
+	--color-primary-light: oklch(95.5% 0.04 264);
+	--color-primary-hover: oklch(46% 0.22 264);
 
 	/* ─── Signal colors (semantic) ─── */
 	--color-signal-below: oklch(52% 0.1 155);

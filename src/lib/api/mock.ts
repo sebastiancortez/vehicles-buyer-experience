@@ -1,7 +1,6 @@
 import type { Listing } from '$lib/types/listing';
 
-// Deterministic placeholder images so cards stay visually stable across reloads.
-const img = (id: number, w = 960, h = 640) => `https://picsum.photos/seed/vehicle-${id}/${w}/${h}`;
+const repeatPhoto = (url: string, count: number) => Array.from({ length: count }, () => url);
 
 export const mockListings: Listing[] = [
 	{
@@ -23,7 +22,10 @@ export const mockListings: Listing[] = [
 		vin: '2HKRW2H8****4521',
 		description:
 			'One-owner family SUV with Honda dealer records from new. EX-L trim with leather, heated seats, power tailgate, sunroof, and Apple CarPlay. Recent work includes rear brakes, battery, and the 48k service. No accident claims reported. Includes winter wheels and cargo tray.',
-		photos: [img(1), img(2), img(3), img(4)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/2019_Honda_CR-V_1.5_TC_2WD_%285%29.jpg/960px-2019_Honda_CR-V_1.5_TC_2WD_%285%29.jpg',
+			4
+		),
 		location: 'Toronto, ON',
 		seller: {
 			username: 'PaulaT_Drives',
@@ -56,7 +58,10 @@ export const mockListings: Listing[] = [
 		vin: '2T3P1RFV****8802',
 		description:
 			'Toyota Certified with balance of powertrain warranty and a fresh 160-point inspection. XLE Premium with SofTex, power liftgate, sunroof, blind-spot monitoring, and all-weather liners. Dealer asking a premium because it is clean, local, and fully reconditioned.',
-		photos: [img(5), img(6), img(7), img(8)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Toyota_RAV4_2019_%28XA50%29_CUV_Quarter_Front.jpg/960px-Toyota_RAV4_2019_%28XA50%29_CUV_Quarter_Front.jpg',
+			4
+		),
 		location: 'Mississauga, ON',
 		seller: {
 			username: 'OakvilleToyota_Official',
@@ -89,7 +94,10 @@ export const mockListings: Listing[] = [
 		vin: '1FTFW1EF****3317',
 		description:
 			'3.5L EcoBoost, SuperCrew, tow package, spray-in liner. Used for commuting and weekend hardware-store runs, not heavy towing. Service history is complete to 2022, then maintained at a local independent shop. Tailgate and rear bumper have light scratches shown in photos.',
-		photos: [img(9), img(10), img(11), img(12)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/2018_Ford_F-150_Crew_Cab_front_5.26.18.jpg/960px-2018_Ford_F-150_Crew_Cab_front_5.26.18.jpg',
+			4
+		),
 		location: 'Calgary, AB',
 		seller: {
 			username: 'mike_alberta',
@@ -122,7 +130,10 @@ export const mockListings: Listing[] = [
 		vin: 'JM3KFBDM****5573',
 		description:
 			'Former executive fleet vehicle with complete Mazda dealer history and recent inspection. GT trim includes Bose audio, HUD, heated and ventilated front seats, heated rear seats, adaptive cruise, and power tailgate. Very clean interior, no smoke smell, no visible wear on bolsters.',
-		photos: [img(13), img(14), img(15), img(16), img(17)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/2022_Mazda_CX-5_2.0_front.jpg/960px-2022_Mazda_CX-5_2.0_front.jpg',
+			5
+		),
 		location: 'Vancouver, BC',
 		seller: {
 			username: 'PacificFleetSales',
@@ -155,7 +166,10 @@ export const mockListings: Listing[] = [
 		vin: '4T1BK1FK****6605',
 		description:
 			'High-mileage V6 Camry that still drives strong. Two keys, remote start, and recent front struts. Seller says there is no rust through, only stone chips and a crack in the lower front lip. Description is brief, so a buyer should confirm oil-consumption history and transmission service.',
-		photos: [img(18), img(19), img(20)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/2015_Toyota_Camry_SE%2C_12.28.19.jpg/960px-2015_Toyota_Camry_SE%2C_12.28.19.jpg',
+			3
+		),
 		location: 'Ottawa, ON',
 		seller: {
 			username: 'dave_ottawa99',
@@ -188,7 +202,10 @@ export const mockListings: Listing[] = [
 		vin: '3VW547AUXLM****42',
 		description:
 			'Manual Autobahn with DCC, Fender audio, navigation, and plaid-seat delete. Seller states the car was never tracked and remains stock aside from Michelin Pilot Sport tires. Dealer reconditioning included fresh front brakes and a carbon cleaning service. Strong enthusiast appeal, but priced above average.',
-		photos: [img(21), img(22), img(23), img(24)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/2020_Volkswagen_Golf_GTi_TSi_S-A_2.0_Front.jpg/960px-2020_Volkswagen_Golf_GTi_TSi_S-A_2.0_Front.jpg',
+			4
+		),
 		location: 'Oakville, ON',
 		seller: {
 			username: 'PrestigeAutoHaus',
@@ -220,7 +237,10 @@ export const mockListings: Listing[] = [
 		color: 'Taffeta White',
 		vin: '2HGFC2F5****7801',
 		description: 'Reliable commuter. Good on gas. Two sets of tires. Selling as-is.',
-		photos: [img(25), img(26)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/2016_Honda_Civic_EX-T_in_Modern_Steel_Metallic%2C_front_left%2C_04-26-2025.jpg/960px-2016_Honda_Civic_EX-T_in_Modern_Steel_Metallic%2C_front_left%2C_04-26-2025.jpg',
+			2
+		),
 		location: 'Hamilton, ON',
 		seller: {
 			username: 'sam_h_sells',
@@ -253,7 +273,10 @@ export const mockListings: Listing[] = [
 		vin: '4S4BTAPC****3302',
 		description:
 			'Turbo Touring XT lease return with the full Subaru Eyesight suite, Nappa leather, heated wheel, ventilated seats, front camera, and factory hitch. Dealer notes a clean inspection and original paint on all panels. Strong fit for family-road-trip and winter-weather searches.',
-		photos: [img(27), img(28), img(29), img(30)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/2023_Subaru_Outback_Premium%2C_front_right%2C_09-09-2023.jpg/960px-2023_Subaru_Outback_Premium%2C_front_right%2C_09-09-2023.jpg',
+			4
+		),
 		location: 'Edmonton, AB',
 		seller: {
 			username: 'NorthStarSubaru',
@@ -286,7 +309,10 @@ export const mockListings: Listing[] = [
 		vin: 'WBA8B9C5****2261',
 		description:
 			'Sport Line with black interior, heated seats, and HUD. Seller discloses curb rash on one wheel and says the valve cover gasket was done last year. Service records are partial rather than complete. Looks attractive on price, but maintenance questions will matter here.',
-		photos: [img(31), img(32), img(33), img(34)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/2019_BMW_330i_M_Sport_2.0_Front.jpg/960px-2019_BMW_330i_M_Sport_2.0_Front.jpg',
+			4
+		),
 		location: 'Toronto, ON',
 		seller: {
 			username: 'euro_drives_toronto',
@@ -319,7 +345,10 @@ export const mockListings: Listing[] = [
 		vin: '1GCVKREC****4432',
 		description:
 			'Z71 package, crew cab, 5.3 V8. Seller says the transmission was replaced at 140k and provides a receipt. Some surface rust on the frame and lower bed sides, typical for prairie use. Practical truck listing with enough detail to be believable, but not especially polished.',
-		photos: [img(35), img(36), img(37)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/2019_Chevrolet_Silverado_1500_Crew_Cab_LT_%28front%29%2C_10.20.19.jpg/960px-2019_Chevrolet_Silverado_1500_Crew_Cab_LT_%28front%29%2C_10.20.19.jpg',
+			3
+		),
 		location: 'Saskatoon, SK',
 		seller: {
 			username: 'prairie_worktrucks',
@@ -352,7 +381,10 @@ export const mockListings: Listing[] = [
 		vin: 'KM8J2CA4****9012',
 		description:
 			'One-owner Tucson with heated seats, heated wheel, lane keep assist, blind-spot monitoring, and remote start. Seller is moving overseas and wants a quick sale but still has dealer maintenance invoices. Good example of a realistic private listing that is clean, credible, and slightly under market.',
-		photos: [img(38), img(39), img(40), img(41)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/2021_Hyundai_Tucson_Elite_N-Line_front_%281%29.jpg/960px-2021_Hyundai_Tucson_Elite_N-Line_front_%281%29.jpg',
+			4
+		),
 		location: 'Montreal, QC',
 		seller: {
 			username: 'leila_mtl',
@@ -385,7 +417,10 @@ export const mockListings: Listing[] = [
 		vin: 'WA1BNAFY****3344',
 		description:
 			'Progressiv trim with Virtual Cockpit, pano roof, 360 camera, and Bang & Olufsen audio. Audi dealer has full records and notes fresh tires plus front brakes. Price is on the high side, but the listing quality and reconditioning are unusually strong compared with private-market examples.',
-		photos: [img(42), img(43), img(44), img(45)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/2019_Audi_Q5_Sport_2.0_TFSI_Quattro_%2881%29.jpg/960px-2019_Audi_Q5_Sport_2.0_TFSI_Quattro_%2881%29.jpg',
+			4
+		),
 		location: 'Ottawa, ON',
 		seller: {
 			username: 'AudiCentreOttawa',
@@ -418,7 +453,10 @@ export const mockListings: Listing[] = [
 		vin: '5XYP3DHC****1177',
 		description:
 			'EX AWD with captain chairs, dual sunroofs, Harman Kardon audio, and full Kia service history. Clean family-hauler listing with enough equipment to explain shopper interest. Dealer notes one previous windshield replacement but no collision repair.',
-		photos: [img(46), img(47), img(48), img(49)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/2020_Kia_Telluride_front_view_%28United_States%29.png/960px-2020_Kia_Telluride_front_view_%28United_States%29.png',
+			4
+		),
 		location: 'Winnipeg, MB',
 		seller: {
 			username: 'KiaCityWinnipeg',
@@ -451,7 +489,10 @@ export const mockListings: Listing[] = [
 		vin: 'JTDKN3DU****8811',
 		description:
 			'High-mileage commuter with cosmetic wear, a cracked rear bumper corner, and fading on the roof. Seller says the hybrid battery is original and the car still returns strong fuel economy. This is intentionally a riskier budget listing that should trigger battery-health and maintenance questions.',
-		photos: [img(50), img(51), img(52)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2012_Toyota_Prius_v_Five%2C_front_left%2C_06-13-2023.jpg/960px-2012_Toyota_Prius_v_Five%2C_front_left%2C_06-13-2023.jpg',
+			3
+		),
 		location: 'Victoria, BC',
 		seller: {
 			username: 'vic_green_cars',
@@ -484,7 +525,10 @@ export const mockListings: Listing[] = [
 		vin: '5YJYGDEE****1102',
 		description:
 			'Long Range AWD with white interior, tow hitch, and 20-inch Induction wheels. Seller includes mobile connector and notes one wheel has minor rash. App access history available. Attractive price for a fresh EV listing, but buyers will likely ask about winter range and tire wear.',
-		photos: [img(53), img(54), img(55), img(56)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Tesla_Model_Y_Front_View.jpg/960px-Tesla_Model_Y_Front_View.jpg',
+			4
+		),
 		location: 'Calgary, AB',
 		seller: {
 			username: 'ryan_ev_yeg',
@@ -517,7 +561,10 @@ export const mockListings: Listing[] = [
 		vin: '1C6RR7NT****5522',
 		description:
 			'Laramie with air suspension, heated and cooled leather, RamBox, panoramic roof, and upgraded audio. Dealer is asking strong money because the truck is stock, clean underneath, and fully serviced. Good case for testing when a nice listing is still likely overpriced.',
-		photos: [img(57), img(58), img(59), img(60)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Ram_1500_TRX_%282022%29_%2852570054859%29.jpg/960px-Ram_1500_TRX_%282022%29_%2852570054859%29.jpg',
+			4
+		),
 		location: 'London, ON',
 		seller: {
 			username: 'StarlightAutoLondon',
@@ -550,7 +597,10 @@ export const mockListings: Listing[] = [
 		vin: '1C4PJMBS****7733',
 		description:
 			'Trailhawk with skid plates, tow hooks, and Selec-Terrain. Seller mentions the 9-speed transmission was reprogrammed after a dealer visit and that the battery is new. Good trail-focused spec, but the drivetrain history is exactly the kind of detail buyers should press on.',
-		photos: [img(61), img(62), img(63)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/2017_Jeep_Cherokee_Trailhawk_4x4_in_Firecracker_Red%2C_front_left%2C_2024-11-05.jpg/960px-2017_Jeep_Cherokee_Trailhawk_4x4_in_Firecracker_Red%2C_front_left%2C_2024-11-05.jpg',
+			3
+		),
 		location: 'Halifax, NS',
 		seller: {
 			username: 'jason_ns_offroad',
@@ -583,7 +633,10 @@ export const mockListings: Listing[] = [
 		vin: '1FMEE5DP****4401',
 		description:
 			'Outer Banks with Sasquatch package, soft top, modular bumper, and Lux package. Seller says it has never been off-road and that hard-top panels are included. Premium pricing seems driven by color, options, and Bronco scarcity rather than objective value.',
-		photos: [img(64), img(65), img(66), img(67)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/2022_Ford_Bronco_4-Door_Outer_Banks_with_Sasquatch_Package%2C_front_left%2C_02-09-2023.jpg/960px-2022_Ford_Bronco_4-Door_Outer_Banks_with_Sasquatch_Package%2C_front_left%2C_02-09-2023.jpg',
+			4
+		),
 		location: 'Vancouver, BC',
 		seller: {
 			username: 'west_coast_rigs',
@@ -615,7 +668,10 @@ export const mockListings: Listing[] = [
 		color: 'Alabaster Silver Metallic',
 		vin: '1HGCR2F5****9941',
 		description: 'Manual Accord. Clean title. Clutch feels good. Minor rust starting on rear arch.',
-		photos: [img(68), img(69)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/2013_Honda_Accord_LX_sedan_in_White_Orchard_Pearl%2C_front_right%2C_04-26-2025.jpg/960px-2013_Honda_Accord_LX_sedan_in_White_Orchard_Pearl%2C_front_right%2C_04-26-2025.jpg',
+			2
+		),
 		location: 'Kitchener, ON',
 		seller: {
 			username: 'kitchener_cars',
@@ -648,7 +704,10 @@ export const mockListings: Listing[] = [
 		vin: 'JF1VA1E6****2205',
 		description:
 			'Rebuilt-title WRX from front-right collision in 2023. Seller says repairs were completed professionally and alignment is straight, but only a few repair photos are provided. Cobb intake installed, stock exhaust included. This is the intentionally suspicious value listing for AI and trust-testing flows.',
-		photos: [img(70), img(71), img(72), img(73)],
+		photos: repeatPhoto(
+			'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Subaru_WRX_%28VA%29_front_view_%28United_States%29.jpg/960px-Subaru_WRX_%28VA%29_front_view_%28United_States%29.jpg',
+			4
+		),
 		location: 'Surrey, BC',
 		seller: {
 			username: 'boostedwestcoast',

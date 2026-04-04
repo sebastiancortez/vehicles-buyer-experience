@@ -2,7 +2,7 @@
 
 > **Source PRD:** [ebay_vehicles_prd.md](ebay_vehicles_prd.md)
 
-This plan breaks the PRD into 6 independently-grabbable vertical slices. Each slice cuts end-to-end through data, server, and UI layers and is demoable on its own once complete. Slices are ordered by dependency — start from the top and work down.
+This plan breaks the PRD into 7 independently-grabbable vertical slices plus 1 optional follow-on slice. Each slice cuts end-to-end through data, server, and UI layers and is demoable on its own once complete. Slices are ordered by dependency — start from the top and work down.
 
 ---
 
@@ -45,11 +45,16 @@ graph LR
     S1 --> S4["Slice 4: Detail Page"]
     S4 --> S5["Slice 5: AI Panel"]
     S5 --> S6["Slice 6: Contact + Save"]
+    S5 --> S7["Slice 7: Listing Q&A"]
+    S6 --> S8["Slice 8: Contact Refinement (Optional)"]
+    S7 --> S8
 ```
 
 
 
-Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete.
+Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete. Slice 7 can begin after Slice 5 without waiting on Slice 6 if separate agents are available. Slice 8 is explicitly optional and must not be implemented without user approval.
+
+Frontend/UI parallel work for Slices 5-8 should follow [docs/slice-5-7-frontend-spec.md](docs/slice-5-7-frontend-spec.md).
 
 ---
 
@@ -64,7 +69,7 @@ Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete.
 | **Svelte**          | Svelte 5 runes mode (`$state`, `$derived`, `$effect`, `$props`) — enforced project-wide                                                            |
 | **Styling**         | Tailwind CSS v4 via `@tailwindcss/vite` plugin                                                                                                     |
 | **Data**            | Mock data with hardcoded values; no computation engines for badges or rankings                                                                     |
-| **AI**              | OpenAI API, server-side only, cached per listing ID. Default model: `gpt-5.4-mini`                                                                |
+| **AI**              | OpenAI API, server-side only, cached per listing ID. Default model: `gpt-5.4-mini`                                                                 |
 | **Package Manager** | pnpm                                                                                                                                               |
 | **MCP**             | Use the Svelte MCP server (`list-sections`, `get-documentation`, `svelte-autofixer`) when writing Svelte code                                      |
 
@@ -75,6 +80,14 @@ Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete.
 
 - Local secrets live in the repo-root `.env` file.
 - Add `OPENAI_API_KEY` to `.env` for the AI confidence route.
+
+---
+
+## Parallel Ownership
+
+- **Backend/API agent** owns `src/routes/api/`**, `src/lib/types/confidence.ts`, and any minimal non-UI helpers for AI/data contracts.
+- **Frontend/UX agent** owns the Svelte components and page wiring for the confidence panel, listing Q&A surface, and contact flow.
+- Both agents should treat `src/lib/types/confidence.ts` as the shared contract boundary and avoid inventing new payload fields outside that file without coordination.
 
 ---
 
@@ -154,10 +167,10 @@ None directly — this is scaffolding. All subsequent slices depend on it.
 ## Slice 2 — Homepage: Search bar + shortcut chips + trending listings
 
 
-|                |             |
-| -------------- | ----------- |
-| **Blocked by** | Slice 1     |
-| **Status**     | In progress |
+|                |         |
+| -------------- | ------- |
+| **Blocked by** | Slice 1 |
+| **Status**     | Done    |
 
 
 ### What to build
@@ -212,10 +225,10 @@ VS-01, VS-02, VS-03, VS-04, VS-05, VS-06
 ## Slice 3 — Results Page: Listing grid + badges + filters + sort
 
 
-|                |             |
-| -------------- | ----------- |
-| **Blocked by** | Slice 1     |
-| **Status**     | Not started |
+|                |         |
+| -------------- | ------- |
+| **Blocked by** | Slice 1 |
+| **Status**     | Done    |
 
 
 ### What to build
@@ -273,10 +286,10 @@ RP-01, RP-02, RP-03, RP-04, RP-05, RP-06, RP-07
 ## Slice 4 — Vehicle Detail Page: Gallery + specs + sticky panel
 
 
-|                |             |
-| -------------- | ----------- |
-| **Blocked by** | Slice 1     |
-| **Status**     | Not started |
+|                |         |
+| -------------- | ------- |
+| **Blocked by** | Slice 1 |
+| **Status**     | Done    |
 
 
 ### What to build
@@ -347,19 +360,30 @@ The centrepiece — an expandable AI panel on the detail page that synthesises k
 
 ### Scope
 
+- **Shared contracts** in `src/lib/types/confidence.ts`:
+  - `ConfidencePayload` for the normalized AI response
+  - `ConfidenceChatMessage`, `ConfidenceChatRequest`, and `ConfidenceChatResponse` for the follow-up Q&A flow
+  - `ContactDraftContext` for future seller-message generation
+  - `AIError` for structured route failures
 - **Server route** at `/api/confidence/[id]/+server.ts`:
   - GET handler that accepts a listing ID
   - Fetches listing data from mock API
   - Accepts the current search query as optional input (for example `?q=` carried from the results page) so the analysis can emphasize what the buyer likely cares about while still covering general due diligence
   - Assembles structured prompt from listing fields (year, make, model, trim, mileage, condition, price, marketAverage, description, sellerType) plus the user search query when present
   - Calls the OpenAI API using `gpt-5.4-mini` by default (server-side only — `OPENAI_API_KEY` env var)
-  - Streams the first uncached response to the client, then caches the completed result in-memory by listing ID
+  - Streams the first uncached response to the client, then caches the completed result in-memory by cache key
+  - Cache key must include listing ID, normalized `q`, prompt version, and model version so prompt changes do not silently reuse stale output
   - Returns cached response on subsequent requests instantly within the same running app instance
   - Returns JSON with an explicit contract:
-    - `knownIssues`: array of 2–5 strings
-    - `priceVerdict`: object with `label` (`below_market` | `fair` | `above_market`) and `reasoning` (2–3 sentences)
-    - `questionsToAsk`: array of 4–6 strings
-    - `buyerIntent`: optional short string summarising how the user query shaped the analysis
+    - success shape:
+      - `ok: true`
+      - `cacheHit: boolean`
+      - `listing`: minimal listing summary for UI context
+      - `analysis`: `ConfidencePayload`
+    - error shape:
+      - `ok: false`
+      - `error.code`: one of `missing_api_key`, `invalid_request`, `listing_not_found`, `generation_failed`, `invalid_model_response`
+      - `error.message`: user-safe message
   - Graceful error handling: returns structured error, never exposes API key or raw error
 - `**ConfidencePanel.svelte` in `src/lib/components/`:
   - Expandable panel on the detail page, triggered by "See full analysis" CTA in StickyPanel
@@ -381,6 +405,8 @@ src/routes/api/confidence/[id]/
   +server.ts                ← OpenAI API call + cache
 src/lib/components/
   ConfidencePanel.svelte    ← Expandable 3-section AI panel
+src/lib/types/
+  confidence.ts             ← Shared confidence/chat/contact contracts
 ```
 
 ### Acceptance criteria
@@ -460,6 +486,132 @@ SV-01, SV-02
 
 ---
 
+## Slice 7 — Listing Q&A: Follow-up questions inside the AI assessment surface
+
+
+|                |             |
+| -------------- | ----------- |
+| **Blocked by** | Slice 5     |
+| **Status**     | Not started |
+
+
+### What to build
+
+Add a lightweight, listing-grounded follow-up Q&A experience inside the same UI surface as the AI Confidence Panel. The structured assessment remains the first thing the buyer sees; chat is the "go deeper" layer for follow-up questions such as red flags, maintenance risk, fit for a use case, or clarification on the seller questions.
+
+### Scope
+
+- **Route contract** at `/api/confidence-chat/[id]/+server.ts`:
+  - POST handler that accepts a listing ID and a chat payload
+  - Request shape:
+    - `listingId`
+    - optional `query`
+    - `messages` array containing recent chat turns
+  - Response shape:
+    - `ok: true`
+    - `cacheHit: boolean`
+    - `listingId`
+    - `message` containing the assistant reply
+    - optional `suggestedPrompts` for the next turn
+  - The route may reuse the confidence cache or confidence payload as input, but it must stay stateless with respect to session history
+- **UX integration**:
+  - Keep the structured AI Confidence Panel as the top of the surface
+  - Add an embedded "Ask about this listing" area below the assessment, not a separate page or disconnected widget
+  - Include 3–4 starter prompts such as:
+    - "What are the biggest red flags here?"
+    - "What should I confirm with the seller?"
+    - "Is this price justified?"
+    - "Would you trust this as a daily driver?"
+- **Chat behavior**:
+  - Session-only conversation history per listing
+  - Ground responses in:
+    - the listing data
+    - the Slice 5 confidence output when available
+    - the buyer's original search query when available
+  - Position the feature as listing guidance, not general car advice or a chatbot
+  - Clear disclaimer that AI guidance is not a vehicle inspection or professional mechanic review
+- **Server route**:
+  - Add a server-only route for listing-grounded Q&A
+  - Accepts listing id, user message, and recent thread context
+  - Uses the same core listing facts and confidence context as Slice 5 so there is one intelligence foundation rather than duplicate prompt systems
+  - Returns concise, grounded answers and optional suggested next questions
+- **State flow**:
+  - Chat lives in the same component surface as the assessment, but remains logically separate from the seller contact modal
+  - Chat context may later be consumed by the contact flow, but seller questions must not depend on chat to function
+
+### File map
+
+```
+src/routes/api/confidence-chat/[id]/
+  +server.ts                ← Listing-grounded follow-up Q&A route
+src/lib/components/
+  ConfidencePanel.svelte    ← Extended to include embedded follow-up Q&A
+src/lib/types/
+  confidence.ts             ← Shared confidence + Q&A payload types
+```
+
+### Acceptance criteria
+
+- The AI Confidence Panel still opens with the structured 3-section assessment first
+- The same panel surface includes an "Ask about this listing" follow-up area below the assessment
+- Buyers can ask at least one follow-up question and receive a listing-grounded response
+- Starter prompts are available to reduce blank-state friction
+- Responses are clearly grounded in the listing and assessment context, not generic automotive advice
+- Conversation history persists while the user remains in the current session for that listing
+- The Q&A experience is responsive and does not break the assessment layout on mobile
+- If the Q&A request fails, the assessment remains usable and the chat area shows a graceful retry state
+
+### Product rules
+
+- Assessment and follow-up Q&A share one trust-building surface
+- Seller contact remains a separate action flow
+- Chat may improve seller-question generation later, but must not be required for due-diligence questions to exist
+
+---
+
+## Slice 8 — Contact Refinement From AI Context *(Optional — ask user before implementation)*
+
+
+|                |                                    |
+| -------------- | ---------------------------------- |
+| **Blocked by** | Slices 6 and 7                     |
+| **Status**     | Optional — do not start unapproved |
+
+
+### What to build
+
+Enhance the Contact Seller flow so the pre-populated outreach can incorporate not just the structured assessment, but also the buyer's expressed concerns from the embedded listing Q&A session. This is an optimization layer on top of Slice 6, not a required dependency for the base contact experience.
+
+### Scope
+
+- **Refinement only**:
+  - Contact Seller continues to work from listing data + Slice 5 assessment even if no chat occurred
+  - When chat context exists, the modal can incorporate the buyer's stated concerns into the generated seller questions or draft message
+- **Question-generation hierarchy**:
+  - Base due-diligence questions from listing facts and risk heuristics
+  - Refine with Slice 5 assessment outputs
+  - Optionally refine further with relevant buyer concerns from Slice 7 chat
+  - Produce a concise, seller-ready draft the buyer can edit before sending
+- **Guardrails**:
+  - Never let chat override core buyer-protection questions
+  - Keep the generated outreach focused on the buyer's best interests, not on making the seller conversation sound clever
+  - Maintain a visible separation between research UI and contact UI
+
+### Acceptance criteria
+
+- Contact Seller still works when no AI chat has occurred
+- When chat context exists, the generated seller questions or draft message can reflect the buyer's stated concerns
+- Core due-diligence questions remain present even if the buyer chat was narrow or low quality
+- The user can review and edit the generated seller message before sending
+- This slice is implemented only after explicit user approval
+
+### Product rules
+
+- This slice is optional
+- Do not begin implementation unless the user explicitly asks for it
+
+---
+
 ## Development log
 
 Agents append entries here when a slice is completed or partially completed. Newest entries at the **top** of each slice subsection (so the latest work is easy to find).
@@ -470,15 +622,15 @@ Agents append entries here when a slice is completed or partially completed. New
 
 ### Slice 2 — Homepage
 
-*(No entries yet.)*
+- **2026-04-04** — Slice 2 complete. Design refresh applied: Shop-app-inspired layout with eBay blue (`#0968F6` / `oklch(52% 0.24 264)`) as primary accent, replacing the original sage green. `SearchBar.svelte` redesigned as a pill-shaped input with circular blue arrow button (Shop-style). `+page.svelte` hero section made airier with generous spacing, staggered chip entrance animations, and fluid typography via `clamp()`. `TrendingListings.svelte` upgraded with "View all →" link, subtitle, and staggered card entrance animations. `ListingCard.svelte` refined with surface background, inner padding, blue-tinted hover shadows, and image error fallback. `+layout.svelte` header modernised: border removed in favour of blur-only, pill-shaped nav links, eBay-colored multi-character wordmark (red/blue/yellow/green cycling). Color palette in `layout.css` fully reworked: all neutrals tinted toward blue (hue 258), `--color-primary-hover` added. `+page.server.ts` loads top 8 trending listings sorted by `watcherCount + saveCount`. `pnpm check` passes with 0 errors / 0 warnings. All 7 acceptance criteria met.
 
 ### Slice 3 — Results page
 
-*(No entries yet.)*
+- **2026-04-04** — Slice 3 complete. Added `src/routes/vehicles/+page.server.ts` with URL-backed query parsing, deterministic chip-to-filter semantics, filtering, best-match sorting with query relevance, and pagination. Built `src/routes/vehicles/+page.svelte` with responsive sidebar/mobile filters, sort controls, empty state, and results grid. Updated `SearchBar.svelte` so the input stays in sync with route data on same-route navigation, and refined `ListingCard.svelte` to surface listing condition in result cards. Verified with `svelte-check` at 0 errors / 0 warnings.
 
 ### Slice 4 — Vehicle detail page
 
-*(No entries yet.)*
+- **2026-04-04** — Slice 4 complete. Added `src/routes/vehicles/[id]/+page.server.ts` and `src/routes/vehicles/[id]/+page.svelte` for the shareable listing detail route with 404 handling, gallery, thumbnails, specs, seller block, market-context pricing, and persistent summary CTA. Built `src/lib/components/StickyPanel.svelte` for desktop sticky and mobile bottom-bar variants. Follow-up patch finished keyboard navigation, touch swipe support, and cleanup needed for a warning-free Svelte build. Verified with `svelte-check` at 0 errors / 0 warnings.
 
 ### Slice 5 — AI Confidence Panel
 
@@ -488,8 +640,17 @@ Agents append entries here when a slice is completed or partially completed. New
 
 *(No entries yet.)*
 
+### Slice 7 — Listing Q&A
+
+*(No entries yet.)*
+
+### Slice 8 — Contact Refinement (Optional)
+
+*(No entries yet.)*
+
 **Example entry format (delete this block when the first real entry exists):**
 
 ```markdown
 - **2026-04-03** — Summary: shadcn-svelte init, `listing.ts` + 20 mock listings, `ListingCard` + `SignalBadge`, nav shell in `+layout.svelte`. Files: `src/lib/api/mock.ts`, `src/lib/components/ListingCard.svelte`. Caveat: placeholder images only.
 ```
+
