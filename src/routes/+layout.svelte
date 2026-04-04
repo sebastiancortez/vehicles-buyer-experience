@@ -2,15 +2,9 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/stores';
-	import { Compass, Menu, X } from 'lucide-svelte';
+	import { Compass } from 'lucide-svelte';
 
 	let { children } = $props();
-
-	let mobileMenuOpen = $state(false);
-
-	function closeMenu() {
-		mobileMenuOpen = false;
-	}
 </script>
 
 <svelte:head>
@@ -34,44 +28,15 @@
 			<div class="flex items-center gap-2">
 				<a
 					href="/vehicles"
-					class="hidden items-center gap-2 rounded-full px-4.5 py-2 text-[0.8rem] font-semibold transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.97] sm:inline-flex {$page.url.pathname.startsWith('/vehicles')
+					class="inline-flex items-center gap-2 rounded-full px-4.5 py-2 text-[0.8rem] font-semibold transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.97] {$page.url.pathname.startsWith('/vehicles')
 						? 'bg-[var(--color-secondary)] text-[var(--color-foreground)]'
 						: 'bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary-hover)]'}"
 				>
 					<Compass size={14} />
 					Explore
 				</a>
-
-				<!-- Mobile hamburger -->
-				<button
-					class="flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-secondary)] md:hidden"
-					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					aria-label="Toggle menu"
-					aria-expanded={mobileMenuOpen}
-				>
-					{#if mobileMenuOpen}
-						<X size={18} />
-					{:else}
-						<Menu size={18} />
-					{/if}
-				</button>
 			</div>
 		</div>
-
-		<!-- Mobile menu -->
-		{#if mobileMenuOpen}
-			<nav
-				class="border-t border-[var(--color-border)] bg-[var(--color-surface)] px-5 pt-2 pb-4 md:hidden"
-			>
-				<a
-					href="/vehicles"
-					onclick={closeMenu}
-					class="block rounded-xl px-3 py-2.5 text-[0.9rem] font-medium text-[var(--color-foreground)]"
-				>
-					Explore Vehicles
-				</a>
-			</nav>
-		{/if}
 	</header>
 
 	<!-- Main content -->
