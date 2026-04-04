@@ -64,7 +64,7 @@ Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete.
 | **Svelte**          | Svelte 5 runes mode (`$state`, `$derived`, `$effect`, `$props`) — enforced project-wide                                                            |
 | **Styling**         | Tailwind CSS v4 via `@tailwindcss/vite` plugin                                                                                                     |
 | **Data**            | Mock data with hardcoded values; no computation engines for badges or rankings                                                                     |
-| **AI**              | Claude API, server-side only, cached per listing ID                                                                                                |
+| **AI**              | OpenAI API, server-side only, cached per listing ID. Default model: `gpt-5.4-mini`                                                                |
 | **Package Manager** | pnpm                                                                                                                                               |
 | **MCP**             | Use the Svelte MCP server (`list-sections`, `get-documentation`, `svelte-autofixer`) when writing Svelte code                                      |
 
@@ -318,7 +318,7 @@ VD-01, VD-02, VD-03, VD-04, VD-05, VD-06
 
 ---
 
-## Slice 5 — AI Confidence Panel: Claude API + server-side caching
+## Slice 5 — AI Confidence Panel: OpenAI API + server-side caching
 
 
 |                |             |
@@ -337,7 +337,7 @@ The centrepiece — an expandable AI panel on the detail page that synthesises k
   - GET handler that accepts a listing ID
   - Fetches listing data from mock API
   - Assembles structured prompt from listing fields (year, make, model, trim, mileage, condition, price, marketAverage, description, sellerType)
-  - Calls Claude API (Anthropic SDK, server-side only — `ANTHROPIC_API_KEY` env var)
+  - Calls the OpenAI API using `gpt-5.4-mini` by default (server-side only — `OPENAI_API_KEY` env var)
   - Caches response in-memory by listing ID (Map or similar); returns cached response on subsequent requests instantly
   - Returns JSON with three sections: `knownIssues`, `priceVerdict`, `questionsToAsk`
   - Graceful error handling: returns structured error, never exposes API key or raw error
@@ -356,7 +356,7 @@ The centrepiece — an expandable AI panel on the detail page that synthesises k
 
 ```
 src/routes/api/confidence/[id]/
-  +server.ts                ← Claude API call + cache
+  +server.ts                ← OpenAI API call + cache
 src/lib/components/
   ConfidencePanel.svelte    ← Expandable 3-section AI panel
 ```
@@ -364,7 +364,7 @@ src/lib/components/
 ### Acceptance criteria
 
 - Expanding the panel on the detail page triggers a fetch to `/api/confidence/[id]`
-- API call is server-side only — `ANTHROPIC_API_KEY` never in client bundle or network tab
+- API call is server-side only — `OPENAI_API_KEY` never in client bundle or network tab
 - Loading skeleton shows on first open while API responds
 - Panel renders 3 sections in order: Known Issues → Price Verdict → Questions to Ask
 - Known Issues section includes AI disclaimer
