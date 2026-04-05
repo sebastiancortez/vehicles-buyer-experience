@@ -50,8 +50,6 @@ graph LR
     S7 --> S8
 ```
 
-
-
 Slices 2, 3, and 4 can run **in parallel** after Slice 1 is complete. Slice 7 can begin after Slice 5 without waiting on Slice 6 if separate agents are available. Slice 8 is explicitly optional and must not be implemented without user approval.
 
 Frontend/UI parallel work for Slices 5-8 should follow [docs/slice-5-7-frontend-spec.md](docs/slice-5-7-frontend-spec.md).
@@ -60,10 +58,9 @@ Frontend/UI parallel work for Slices 5-8 should follow [docs/slice-5-7-frontend-
 
 ## Conventions
 
-
 | Convention          | Detail                                                                                                                                             |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **UI Library**      | shadcn-svelte (bits-ui v2) — install via CLI, use as primary component libraryUse /shadcn-svelte skill                                            |
+| **UI Library**      | shadcn-svelte (bits-ui v2) — install via CLI, use as primary component libraryUse /shadcn-svelte skill                                             |
 | **Custom UI**       | Only when shadcn-svelte doesn't cover it; prefer extending over building from scratch                                                              |
 | **Design Skill**    | Apply the `/frontend-design` skill for visual direction — distinctive typography, color palette, spatial composition. Avoid generic AI aesthetics. |
 | **Svelte**          | Svelte 5 runes mode (`$state`, `$derived`, `$effect`, `$props`) — enforced project-wide                                                            |
@@ -72,7 +69,6 @@ Frontend/UI parallel work for Slices 5-8 should follow [docs/slice-5-7-frontend-
 | **AI**              | OpenAI API, server-side only, cached per listing ID. Default model: `gpt-5.4-mini`                                                                 |
 | **Package Manager** | pnpm                                                                                                                                               |
 | **MCP**             | Use the Svelte MCP server (`list-sections`, `get-documentation`, `svelte-autofixer`) when writing Svelte code                                      |
-
 
 ---
 
@@ -85,7 +81,7 @@ Frontend/UI parallel work for Slices 5-8 should follow [docs/slice-5-7-frontend-
 
 ## Parallel Ownership
 
-- **Backend/API agent** owns `src/routes/api/`**, `src/lib/types/confidence.ts`, and any minimal non-UI helpers for AI/data contracts.
+- **Backend/API agent** owns `src/routes/api/`\*\*, `src/lib/types/confidence.ts`, and any minimal non-UI helpers for AI/data contracts.
 - **Frontend/UX agent** owns the Svelte components and page wiring for the confidence panel, listing Q&A surface, and contact flow.
 - Both agents should treat `src/lib/types/confidence.ts` as the shared contract boundary and avoid inventing new payload fields outside that file without coordination.
 
@@ -93,12 +89,10 @@ Frontend/UI parallel work for Slices 5-8 should follow [docs/slice-5-7-frontend-
 
 ## Slice 1 — Foundation: Mock data, types, shadcn-svelte, layout shell
 
-
 |                |                      |
 | -------------- | -------------------- |
 | **Blocked by** | Nothing — start here |
 | **Status**     | Done                 |
-
 
 ### What to build
 
@@ -138,7 +132,7 @@ Establish the data contract, shared UI primitives, and app shell that every othe
 src/lib/types/
   listing.ts              ← Listing, Seller, badge types
 src/lib/api/
-  mock.ts                 ← 20 mock listings
+  mock.ts                 ← 40 mock listings
   index.ts                ← Exports mock-backed listing accessors
 src/lib/components/
   ListingCard.svelte      ← Shared listing card
@@ -152,7 +146,7 @@ src/routes/
 - `pnpm dev` starts without errors
 - shadcn-svelte components are installed and importable
 - TypeScript types compile cleanly
-- `mock.ts` exports 20 listings with varied data
+- `mock.ts` exports 40 listings with varied data
 - `ListingCard` renders a card with photo, details, and badges
 - `SignalBadge` renders all 6 badge variants (3 price + 3 mileage)
 - Layout shell renders nav + content slot on all breakpoints
@@ -166,12 +160,10 @@ None directly — this is scaffolding. All subsequent slices depend on it.
 
 ## Slice 2 — Homepage: Search bar + shortcut chips + trending listings
 
-
 |                |         |
 | -------------- | ------- |
 | **Blocked by** | Slice 1 |
 | **Status**     | Done    |
-
 
 ### What to build
 
@@ -224,12 +216,10 @@ VS-01, VS-02, VS-03, VS-04, VS-05, VS-06
 
 ## Slice 3 — Results Page: Listing grid + badges + filters + sort
 
-
 |                |         |
 | -------------- | ------- |
 | **Blocked by** | Slice 1 |
 | **Status**     | Done    |
-
 
 ### What to build
 
@@ -285,12 +275,10 @@ RP-01, RP-02, RP-03, RP-04, RP-05, RP-06, RP-07
 
 ## Slice 4 — Vehicle Detail Page: Gallery + specs + sticky panel
 
-
 |                |         |
 | -------------- | ------- |
 | **Blocked by** | Slice 1 |
 | **Status**     | Done    |
-
 
 ### What to build
 
@@ -347,12 +335,10 @@ VD-01, VD-02, VD-03, VD-04, VD-05, VD-06
 
 ## Slice 5 — AI Confidence Panel: OpenAI API + server-side caching
 
-
 |                |             |
 | -------------- | ----------- |
 | **Blocked by** | Slice 4     |
 | **Status**     | Not started |
-
 
 ### What to build
 
@@ -432,12 +418,10 @@ AI-01, AI-02, AI-03, AI-04, AI-05, AI-06, AI-07, AI-08, AI-09
 
 ## Slice 6 — Contact Seller Modal + Session Save
 
-
 |                |             |
 | -------------- | ----------- |
 | **Blocked by** | Slice 5     |
 | **Status**     | Not started |
-
 
 ### What to build
 
@@ -488,12 +472,10 @@ SV-01, SV-02
 
 ## Slice 7 — Listing Q&A: Follow-up questions in a dedicated drawer surface
 
-
 |                |             |
 | -------------- | ----------- |
 | **Blocked by** | Slice 5     |
 | **Status**     | Not started |
-
 
 ### What to build
 
@@ -572,14 +554,12 @@ src/lib/types/
 
 ---
 
-## Slice 8 — Contact Refinement From AI Context *(Optional — ask user before implementation)*
-
+## Slice 8 — Contact Refinement From AI Context _(Optional — ask user before implementation)_
 
 |                |                                    |
 | -------------- | ---------------------------------- |
 | **Blocked by** | Slices 6 and 7                     |
 | **Status**     | Optional — do not start unapproved |
-
 
 ### What to build
 
@@ -637,22 +617,22 @@ Agents append entries here when a slice is completed or partially completed. New
 
 ### Slice 5 — AI Confidence Panel
 
-*(No entries yet.)*
+_(No entries yet.)_
 
 ### Slice 6 — Contact + Save
 
-*(No entries yet.)*
+_(No entries yet.)_
 
 ### Slice 7 — Listing Q&A
 
-*(No entries yet.)*
+_(No entries yet.)_
 
 ### Slice 8 — Contact Refinement (Optional)
 
-*(No entries yet.)*
+_(No entries yet.)_
 
 **Example entry format (delete this block when the first real entry exists):**
 
 ```markdown
-- **2026-04-03** — Summary: shadcn-svelte init, `listing.ts` + 20 mock listings, `ListingCard` + `SignalBadge`, nav shell in `+layout.svelte`. Files: `src/lib/api/mock.ts`, `src/lib/components/ListingCard.svelte`. Caveat: placeholder images only.
+- **2026-04-03** — Summary: shadcn-svelte init, `listing.ts` + 40 mock listings, `ListingCard` + `SignalBadge`, nav shell in `+layout.svelte`. Files: `src/lib/api/mock.ts`, `src/lib/components/ListingCard.svelte`. Caveat: placeholder images only.
 ```

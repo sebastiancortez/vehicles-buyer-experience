@@ -37,7 +37,7 @@
 			bind:value={query}
 			onfocus={() => (focused = true)}
 			onblur={() => (focused = false)}
-			placeholder="What are you looking for?"
+			placeholder="Family SUV, Porsche 911, vintage project..."
 			class="search-input h-13 flex-1 bg-transparent px-3.5 text-[0.925rem] font-medium text-[var(--color-foreground)] outline-none placeholder:text-[var(--color-text-tertiary)] sm:h-14 sm:text-[0.975rem]"
 		/>
 		<button

@@ -1,5 +1,13 @@
 import { getListings } from '$lib/api';
-import type { Listing, Condition, SellerType, PriceBadge, MileageBadge } from '$lib/types/listing';
+import type {
+	Listing,
+	Condition,
+	SellerType,
+	PriceBadge,
+	MileageBadge,
+	Transmission,
+	Drivetrain
+} from '$lib/types/listing';
 import type { PageServerLoad } from './$types';
 
 /* ── Category aliases for broad text searches ──────────────────────────── */
@@ -10,19 +18,58 @@ const CATEGORY_ALIASES: Record<string, string[]> = {
 	sedan: ['civic', 'camry', 'accord', '3 series', '330i', 'wrx'],
 	sedans: ['civic', 'camry', 'accord', '3 series', '330i', 'wrx'],
 	suv: [
-		'cr-v', 'rav4', 'cx-5', 'tucson', 'q5', 'telluride',
-		'cherokee', 'outback', 'model y', 'bronco'
+		'cr-v',
+		'rav4',
+		'cx-5',
+		'tucson',
+		'q5',
+		'telluride',
+		'cherokee',
+		'outback',
+		'model y',
+		'bronco'
 	],
 	suvs: [
-		'cr-v', 'rav4', 'cx-5', 'tucson', 'q5', 'telluride',
-		'cherokee', 'outback', 'model y', 'bronco'
+		'cr-v',
+		'rav4',
+		'cx-5',
+		'tucson',
+		'q5',
+		'telluride',
+		'cherokee',
+		'outback',
+		'model y',
+		'bronco'
 	],
 	ev: ['tesla', 'model y', 'prius'],
-	electric: ['tesla', 'model y']
+	electric: ['tesla', 'model y'],
+	exotic: ['911', 'carrera', 'gt-r', 'r8', 'supra', 'm3'],
+	exotics: ['911', 'carrera', 'gt-r', 'r8', 'supra', 'm3'],
+	vintage: ['mustang fastback', '325is', 'e30', '1967', '1989', '1994'],
+	classic: ['mustang fastback', '325is', 'e30', '1967', '1989', '1994'],
+	classics: ['mustang fastback', '325is', 'e30', '1967', '1989', '1994'],
+	project: ['project', 'restoration', 'boxed', 'rolling', 'incomplete'],
+	projects: ['project', 'restoration', 'boxed', 'rolling', 'incomplete'],
+	manual: ['6mt', '5-speed', 'six-speed', 'manual'],
+	coupe: ['911', 'mustang', 'gt-r', 'r8', 'supra', 'm3'],
+	coupes: ['911', 'mustang', 'gt-r', 'r8', 'supra', 'm3'],
+	enthusiast: ['gti', 'wrx', '911', 'gt-r', 'r8', 'supra', 'm3', '325is'],
+	enthusiasts: ['gti', 'wrx', '911', 'gt-r', 'r8', 'supra', 'm3', '325is']
 };
 
 const NOISE_WORDS = new Set([
-	'reliable', 'first', 'car', 'cars', 'family', 'budget', 'a', 'the', 'for', 'and', 'or'
+	'reliable',
+	'first',
+	'car',
+	'cars',
+	'family',
+	'budget',
+	'weekend',
+	'a',
+	'the',
+	'for',
+	'and',
+	'or'
 ]);
 
 /* ── Query parser — extracts structured filters from free-text chips ──── */
@@ -165,9 +212,7 @@ function sortListings(listings: Listing[], sort: SortKey, query = ''): Listing[]
 			sorted.sort((a, b) => a.mileage - b.mileage);
 			break;
 		case 'newest':
-			sorted.sort(
-				(a, b) => new Date(b.listedAt).getTime() - new Date(a.listedAt).getTime()
-			);
+			sorted.sort((a, b) => new Date(b.listedAt).getTime() - new Date(a.listedAt).getTime());
 			break;
 	}
 	return sorted;
@@ -185,12 +230,12 @@ export const load: PageServerLoad = async ({ url }) => {
 	const maxMileage = Number(url.searchParams.get('maxMileage')) || undefined;
 	const conditionParam = url.searchParams.get('condition');
 	const sellerTypeParam = url.searchParams.get('sellerType') as SellerType | null;
+	const transmissionParam = url.searchParams.get('transmission') as Transmission | null;
+	const drivetrainParam = url.searchParams.get('drivetrain') as Drivetrain | null;
 	const sort = (url.searchParams.get('sort') as SortKey) || 'best';
 	const pageNum = Math.max(1, Number(url.searchParams.get('page')) || 1);
 
-	const conditions = conditionParam
-		? (conditionParam.split(',') as Condition[])
-		: undefined;
+	const conditions = conditionParam ? (conditionParam.split(',') as Condition[]) : undefined;
 
 	// Parse embedded filters from query text
 	const parsed = parseSearchQuery(q);
@@ -208,6 +253,8 @@ export const load: PageServerLoad = async ({ url }) => {
 		if (parsed.mileageBadge && listing.mileageBadge !== parsed.mileageBadge) return false;
 		if (conditions?.length && !conditions.includes(listing.condition)) return false;
 		if (sellerTypeParam && listing.seller.type !== sellerTypeParam) return false;
+		if (transmissionParam && listing.transmission !== transmissionParam) return false;
+		if (drivetrainParam && listing.drivetrain !== drivetrainParam) return false;
 		return true;
 	});
 
@@ -234,7 +281,9 @@ export const load: PageServerLoad = async ({ url }) => {
 			minMileage: minMileage ?? null,
 			maxMileage: maxMileage ?? null,
 			condition: conditions ?? null,
-			sellerType: sellerTypeParam ?? null
+			sellerType: sellerTypeParam ?? null,
+			transmission: transmissionParam ?? null,
+			drivetrain: drivetrainParam ?? null
 		},
 		parsedFilters: {
 			maxPrice: parsed.maxPrice ?? null,

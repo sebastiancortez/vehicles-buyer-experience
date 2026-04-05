@@ -13,10 +13,7 @@ import {
 	normalizeStringArray,
 	setCachedConfidenceAnalysis
 } from '$lib/server/confidence';
-import type {
-	ConfidencePayload,
-	ConfidenceResponse
-} from '$lib/types/confidence';
+import type { ConfidencePayload, ConfidenceResponse } from '$lib/types/confidence';
 import type { Listing } from '$lib/types/listing';
 
 const CONFIDENCE_SCHEMA = {
@@ -151,6 +148,8 @@ function buildSystemPrompt(): string {
 		'You are generating buyer-facing used vehicle due diligence summaries.',
 		'Return JSON only and follow the schema exactly.',
 		'Ground every point in the listing facts plus common used-car risk patterns for this vehicle.',
+		'Handle enthusiast inventory well, including collector cars, modified performance cars, imports, exotics, and unfinished projects.',
+		'For enthusiast listings, pay attention to originality, specialist maintenance, modification quality, documentation depth, and project completeness.',
 		'Known issues should be concise, specific, and practical.',
 		'Price reasoning should compare the ask against the market average and condition.',
 		'Questions to ask should be concrete and seller-ready, not generic filler.',
@@ -164,15 +163,14 @@ function buildUserPrompt(listing: Listing, query: string | null): string {
 			task: 'Generate a normalized confidence analysis for a used vehicle listing.',
 			outputRequirements: {
 				knownIssues:
-					'2 to 5 concise bullet-style strings about likely reliability, condition, title/history, maintenance, or seller-transparency concerns.',
+					'2 to 5 concise bullet-style strings about likely reliability, condition, title/history, maintenance, seller-transparency, originality, modification, or project-completeness concerns.',
 				priceVerdict:
 					'Choose below_market, fair, or above_market based on the ask, marketAverage, condition, mileage, and listing details.',
 				questionsToAsk:
-					'Provide 4 to 6 highly specific seller questions tailored to this listing.',
-				buyerIntent:
-					query
-						? 'Optional short phrase summarizing what this buyer likely cares about.'
-						: 'Return null.'
+					'Provide 4 to 6 highly specific seller questions tailored to this listing, including provenance, modifications, specialist service, or missing-parts questions when relevant.',
+				buyerIntent: query
+					? 'Optional short phrase summarizing what this buyer likely cares about.'
+					: 'Return null.'
 			},
 			buyerQuery: query,
 			listing: {

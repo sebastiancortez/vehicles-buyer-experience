@@ -8,10 +8,10 @@
 
 	const chips = [
 		'Reliable under $15k',
-		'Low mileage sedans',
 		'Family SUVs',
-		'First car under $10k',
-		'Trucks under $20k'
+		'Manual enthusiast cars',
+		'Exotic weekend cars',
+		'Vintage project cars'
 	];
 
 	function navigateChip(chip: string) {
@@ -35,7 +35,7 @@
 			<p
 				class="mt-3.5 text-[clamp(0.9rem,2vw,1.05rem)] leading-relaxed text-[var(--color-text-secondary)]"
 			>
-				AI-powered insights on pricing, reliability, and what to ask the seller.
+				AI-powered insights on pricing, reliability, originality, and what to ask the seller.
 			</p>
 		</div>
 

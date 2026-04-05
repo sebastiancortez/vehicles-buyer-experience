@@ -9,6 +9,7 @@
 	import ConfidenceDrawer from '$lib/components/ConfidenceDrawer.svelte';
 	import ContactModal from '$lib/components/ContactModal.svelte';
 	import { isSaved, toggleSaved } from '$lib/stores/saved.svelte';
+	import { buildVehicleImageFallback, resolveListingPhoto } from '$lib/utils';
 	import {
 		ChevronLeft,
 		ChevronRight,
@@ -58,22 +59,23 @@
 	let touchStartX = 0;
 	let touchStartY = 0;
 
-	const imageFallback = `data:image/svg+xml;utf8,${encodeURIComponent(
-		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640"><rect width="960" height="640" fill="#e8e4dc"/><text x="480" y="330" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#8a8070">Photo unavailable</text></svg>`
-	)}`;
+	const imageFallback = $derived(buildVehicleImageFallback(listing));
+	const galleryPhotos = $derived(
+		listing.photos.map((photo) => resolveListingPhoto(photo, listing))
+	);
 
 	function nextPhoto() {
-		activeIndex = (activeIndex + 1) % listing.photos.length;
+		activeIndex = (activeIndex + 1) % galleryPhotos.length;
 	}
 	function prevPhoto() {
-		activeIndex = (activeIndex - 1 + listing.photos.length) % listing.photos.length;
+		activeIndex = (activeIndex - 1 + galleryPhotos.length) % galleryPhotos.length;
 	}
 	function goToPhoto(i: number) {
 		activeIndex = i;
 	}
 
 	function handleGalleryKeydown(e: KeyboardEvent) {
-		if (!galleryFocused || listing.photos.length <= 1) return;
+		if (!galleryFocused || galleryPhotos.length <= 1) return;
 		if (e.key === 'ArrowRight') nextPhoto();
 		else if (e.key === 'ArrowLeft') prevPhoto();
 	}
@@ -85,7 +87,7 @@
 	}
 
 	function handleTouchEnd(e: TouchEvent) {
-		if (listing.photos.length <= 1) return;
+		if (galleryPhotos.length <= 1) return;
 
 		const touch = e.changedTouches[0];
 		const deltaX = touch.clientX - touchStartX;
@@ -114,8 +116,7 @@
 			}).format(n),
 		mileage: (n: number) =>
 			new Intl.NumberFormat('en-CA', { maximumFractionDigits: 0 }).format(n) + ' km',
-		date: (s: string) =>
-			new Date(s).toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })
+		date: (s: string) => new Date(s).toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })
 	};
 
 	const priceDiff = $derived(listing.marketAverage - listing.price);
@@ -135,9 +136,10 @@
 		},
 		{
 			label: 'Transmission',
-			value: listing.transmission === 'cvt'
-				? 'CVT'
-				: listing.transmission.charAt(0).toUpperCase() + listing.transmission.slice(1)
+			value:
+				listing.transmission === 'cvt'
+					? 'CVT'
+					: listing.transmission.charAt(0).toUpperCase() + listing.transmission.slice(1)
 		},
 		{ label: 'Drivetrain', value: listing.drivetrain.toUpperCase() },
 		{ label: 'Color', value: listing.color },
@@ -159,7 +161,9 @@
 	<title>{listing.title} — Vehicles</title>
 	<meta
 		name="description"
-		content="{listing.year} {listing.make} {listing.model} {listing.trim} — {fmt.price(listing.price)} — {listing.location}"
+		content="{listing.year} {listing.make} {listing.model} {listing.trim} — {fmt.price(
+			listing.price
+		)} — {listing.location}"
 	/>
 </svelte:head>
 
@@ -218,11 +222,14 @@
 			>
 				<!-- Main image -->
 				<div style="aspect-ratio: 16/10;" class="relative">
-					{#each listing.photos as photo, i (i)}
+					{#each galleryPhotos as photo, i (i)}
 						<img
 							src={photo}
-							alt="{listing.title} — photo {i + 1} of {listing.photos.length}"
-							class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] {i === activeIndex ? 'opacity-100' : 'pointer-events-none opacity-0'}"
+							alt="{listing.title} — photo {i + 1} of {galleryPhotos.length}"
+							class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] {i ===
+							activeIndex
+								? 'opacity-100'
+								: 'pointer-events-none opacity-0'}"
 							loading={i === 0 ? 'eager' : 'lazy'}
 							onerror={handleImageError}
 							aria-hidden={i !== activeIndex}
@@ -230,17 +237,17 @@
 					{/each}
 
 					<!-- Nav arrows -->
-					{#if listing.photos.length > 1}
+					{#if galleryPhotos.length > 1}
 						<button
 							onclick={prevPhoto}
-							class="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[oklch(10%_0.005_260/0.4)] text-white backdrop-blur-md transition-all duration-200 hover:bg-[oklch(10%_0.005_260/0.6)]"
+							class="absolute top-1/2 left-3 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[oklch(10%_0.005_260/0.4)] text-white backdrop-blur-md transition-all duration-200 hover:bg-[oklch(10%_0.005_260/0.6)]"
 							aria-label="Previous photo"
 						>
 							<ChevronLeft size={20} />
 						</button>
 						<button
 							onclick={nextPhoto}
-							class="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[oklch(10%_0.005_260/0.4)] text-white backdrop-blur-md transition-all duration-200 hover:bg-[oklch(10%_0.005_260/0.6)]"
+							class="absolute top-1/2 right-3 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[oklch(10%_0.005_260/0.4)] text-white backdrop-blur-md transition-all duration-200 hover:bg-[oklch(10%_0.005_260/0.6)]"
 							aria-label="Next photo"
 						>
 							<ChevronRight size={20} />
@@ -249,23 +256,28 @@
 
 					<!-- Counter -->
 					<div
-						class="absolute bottom-3 right-3 rounded-full bg-[oklch(10%_0.005_260/0.5)] px-3 py-1 text-[0.7rem] font-medium text-white backdrop-blur-md"
+						class="absolute right-3 bottom-3 rounded-full bg-[oklch(10%_0.005_260/0.5)] px-3 py-1 text-[0.7rem] font-medium text-white backdrop-blur-md"
 					>
-						{activeIndex + 1} / {listing.photos.length}
+						{activeIndex + 1} / {galleryPhotos.length}
 					</div>
 				</div>
 			</section>
 
 			<!-- Thumbnail strip -->
-			{#if listing.photos.length > 1}
-				<div class="mt-3 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Photo thumbnails">
-					{#each listing.photos as photo, i (i)}
+			{#if galleryPhotos.length > 1}
+				<div
+					class="mt-3 flex gap-2 overflow-x-auto pb-1"
+					role="tablist"
+					aria-label="Photo thumbnails"
+				>
+					{#each galleryPhotos as photo, i (i)}
 						<button
 							role="tab"
 							aria-selected={i === activeIndex}
 							aria-label="View photo {i + 1}"
 							onclick={() => goToPhoto(i)}
-							class="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg transition-all duration-200 {i === activeIndex
+							class="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg transition-all duration-200 {i ===
+							activeIndex
 								? 'ring-2 ring-[var(--color-primary)] ring-offset-2'
 								: 'opacity-60 hover:opacity-90'}"
 						>
@@ -305,7 +317,9 @@
 						At market average
 					{/if}
 					<span class="text-[var(--color-text-tertiary)]">
-						for {listing.year} {listing.make} {listing.model}
+						for {listing.year}
+						{listing.make}
+						{listing.model}
 					</span>
 				</p>
 			</div>
@@ -352,7 +366,9 @@
 					</div>
 					<div class="text-right">
 						<span class="text-[0.7rem] text-[var(--color-text-tertiary)]">Avg.</span>
-						<p class="text-[0.925rem] font-semibold text-[var(--color-text-secondary)] tabular-nums">
+						<p
+							class="text-[0.925rem] font-semibold text-[var(--color-text-secondary)] tabular-nums"
+						>
 							{fmt.price(listing.marketAverage)}
 						</p>
 					</div>
@@ -419,7 +435,7 @@
 									{listing.seller.username}
 								</span>
 								<span
-									class="rounded-full bg-[var(--color-secondary)] px-2 py-0.5 text-[0.65rem] font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider"
+									class="rounded-full bg-[var(--color-secondary)] px-2 py-0.5 text-[0.65rem] font-semibold tracking-wider text-[var(--color-text-secondary)] uppercase"
 								>
 									{listing.seller.type}
 								</span>

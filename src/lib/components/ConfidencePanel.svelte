@@ -63,9 +63,7 @@
 		}
 	};
 
-	const currentVerdict = $derived(
-		analysis ? verdictDisplay[analysis.priceVerdict.label] : null
-	);
+	const currentVerdict = $derived(analysis ? verdictDisplay[analysis.priceVerdict.label] : null);
 
 	$effect(() => {
 		if (expanded && !hasFetched) {
@@ -117,14 +115,42 @@
 	}
 
 	function getMockAnalysis(): ConfidencePayload {
-		const { year, make, model, trim, condition, mileage, price, marketAverage, seller, description } =
-			listing;
+		const {
+			year,
+			make,
+			model,
+			trim,
+			condition,
+			mileage,
+			price,
+			marketAverage,
+			seller,
+			description
+		} = listing;
+		const lowerDescription = description.toLowerCase();
+		const lowerTitle = `${listing.title} ${description}`.toLowerCase();
 		const isSalvage = condition === 'salvage';
 		const isDealer = seller.type === 'dealer';
 		const priceDiff = marketAverage - price;
 		const isHighMiles = listing.mileageBadge === 'high';
 		const isLowMiles = listing.mileageBadge === 'low';
 		const descShort = description.length < 100;
+		const isManual = listing.transmission === 'manual';
+		const isVintage = new Date().getFullYear() - year >= 20;
+		const isProject =
+			condition === 'fair' ||
+			/project|restoration|rolling|boxed|needs wiring|needs .*paint|parts/i.test(description);
+		const isModified =
+			/cobb|intake|coilover|cat-back|dyno|stock exhaust included|swap|aftermarket/i.test(
+				description
+			);
+		const isImport = /import|right-hand-drive|rhd|auction sheet|federal import/i.test(description);
+		const isCollectorGrade =
+			/documented|binder of service|compression|paint-meter|original|provenance/i.test(description);
+		const isHighEnd =
+			price >= 60_000 ||
+			['Porsche', 'Audi', 'Nissan'].includes(make) ||
+			['911', 'GT-R', 'R8'].includes(model);
 		const fmt = (n: number) => n.toLocaleString('en-CA');
 
 		const knownIssues: string[] = [];
@@ -141,6 +167,30 @@
 			);
 		}
 
+		if (isVintage) {
+			knownIssues.push(
+				`Older enthusiast cars like this ${year} ${make} ${model} trade heavily on rust, originality, and documentation. Deferred cosmetic work can be expensive, so verify what is preserved versus restored versus replaced.`
+			);
+		}
+
+		if (isProject) {
+			knownIssues.push(
+				'This reads like a project or restoration-in-progress rather than a turnkey driver. Missing parts, unfinished wiring or bodywork, and unknown assembly quality can quickly change the real cost to finish it.'
+			);
+		}
+
+		if (isModified) {
+			knownIssues.push(
+				'Aftermarket modifications can improve appeal for enthusiasts but also add tuning, driveline, and emissions risk. Confirm who installed the parts, whether stock pieces are included, and whether the car has seen track or launch-heavy use.'
+			);
+		}
+
+		if (isImport) {
+			knownIssues.push(
+				'Imported enthusiast cars need extra diligence around federal import paperwork, odometer history, and parts sourcing. The value story is weaker if the documentation trail is thin.'
+			);
+		}
+
 		if (priceDiff > marketAverage * 0.15) {
 			knownIssues.push(
 				'The asking price is significantly below market average. While this could be a motivated seller, it may also indicate undisclosed issues worth investigating.'
@@ -150,6 +200,12 @@
 		if (!isDealer) {
 			knownIssues.push(
 				'Private sellers are not required to offer warranties or return policies. Verify the title, obtain a vehicle history report, and arrange an independent inspection.'
+			);
+		}
+
+		if (isHighEnd && !isProject) {
+			knownIssues.push(
+				'High-end performance cars are sensitive to specialist maintenance history and consumables. Tires, brakes, clutches, and deferred service can materially change whether the ask is actually attractive.'
 			);
 		}
 
@@ -164,13 +220,14 @@
 
 		if (priceDiff > 0) {
 			verdictLabel = 'below_market';
-			reasoning = `At $${fmt(price)}, this ${year} ${make} ${model} is priced $${fmt(Math.abs(priceDiff))} below the market average of $${fmt(marketAverage)} for comparable listings. ${isSalvage ? 'The salvage title likely accounts for some of this discount.' : isHighMiles ? 'Higher mileage may explain part of the discount.' : 'This appears to be a competitive price for the segment.'}`;
+			reasoning = `At $${fmt(price)}, this ${year} ${make} ${model} is priced $${fmt(Math.abs(priceDiff))} below the market average of $${fmt(marketAverage)} for comparable listings. ${isSalvage ? 'The salvage title likely accounts for some of this discount.' : isProject ? 'Project-level completeness is probably a major reason for the discount.' : isHighMiles ? 'Higher mileage may explain part of the discount.' : isCollectorGrade ? 'That discount is interesting because the listing also shows stronger-than-average documentation.' : 'This appears competitive for the segment.'}`;
 		} else if (priceDiff < 0) {
 			verdictLabel = 'above_market';
-			reasoning = `At $${fmt(price)}, this ${year} ${make} ${model} is priced $${fmt(Math.abs(priceDiff))} above the market average of $${fmt(marketAverage)}. ${isDealer ? 'Dealer pricing may include warranty or certification benefits.' : 'Consider negotiating or comparing similar listings.'} ${isLowMiles ? 'Lower-than-average mileage may justify some premium.' : ''}`.trim();
+			reasoning =
+				`At $${fmt(price)}, this ${year} ${make} ${model} is priced $${fmt(Math.abs(priceDiff))} above the market average of $${fmt(marketAverage)}. ${isDealer ? 'Dealer pricing may include warranty or certification benefits.' : 'Consider negotiating or comparing similar listings.'} ${isLowMiles ? 'Lower-than-average mileage may justify some premium.' : ''} ${isCollectorGrade || isHighEnd ? 'For enthusiast cars, documentation, originality, and specialist service can justify part of that premium if the paperwork is real.' : ''}`.trim();
 		} else {
 			verdictLabel = 'fair';
-			reasoning = `At $${fmt(price)}, this ${year} ${make} ${model} is priced near the market average of $${fmt(marketAverage)}. This is a reasonable ask given the condition and mileage.`;
+			reasoning = `At $${fmt(price)}, this ${year} ${make} ${model} is priced near the market average of $${fmt(marketAverage)}. This is a reasonable ask given the condition, mileage, and the level of documentation shown in the listing.`;
 		}
 
 		const questionsToAsk: string[] = [];
@@ -187,8 +244,40 @@
 
 		if (isHighMiles) {
 			questionsToAsk.push('When was the timing belt or chain last replaced?');
+			questionsToAsk.push('Have the transmission and differential fluids been serviced recently?');
+		}
+
+		if (isManual) {
+			questionsToAsk.push('When were the clutch, flywheel, and shifter bushings last serviced?');
+		}
+
+		if (isHighEnd) {
 			questionsToAsk.push(
-				'Have the transmission and differential fluids been serviced recently?'
+				`Do you have invoices from a ${make} specialist for the most recent major service and consumables?`
+			);
+		}
+
+		if (isCollectorGrade || isVintage) {
+			questionsToAsk.push(
+				'Which panels, paint, interior pieces, and major components are original versus restored or replaced?'
+			);
+		}
+
+		if (isProject) {
+			questionsToAsk.push(
+				'What parts are still missing, and what major work is required before the car is road-ready?'
+			);
+		}
+
+		if (isModified) {
+			questionsToAsk.push(
+				'Who installed and tuned the modifications, and are the stock parts included in the sale?'
+			);
+		}
+
+		if (isImport) {
+			questionsToAsk.push(
+				'Can you share the import paperwork, auction sheet, and any records that verify mileage before it arrived in Canada?'
 			);
 		}
 
@@ -203,22 +292,36 @@
 		}
 
 		questionsToAsk.push(
-			'Would you be open to a pre-purchase inspection by an independent mechanic?'
+			`Would you be open to a pre-purchase inspection by an independent${isHighEnd || isVintage ? ` ${make}` : ''} specialist?`
 		);
 
 		return {
 			listingId: listing.id,
 			query: searchQuery || null,
-			buyerIntent: searchQuery ? `Focused on: ${searchQuery}` : undefined,
-			knownIssues,
+			buyerIntent: searchQuery
+				? `Focused on: ${searchQuery}`
+				: isProject
+					? 'Focused on: project-car completeness and finish costs'
+					: isHighEnd
+						? 'Focused on: provenance, originality, and specialist maintenance'
+						: isModified
+							? 'Focused on: modification quality and mechanical risk'
+							: undefined,
+			knownIssues: knownIssues
+				.filter((issue, index, all) => all.indexOf(issue) === index)
+				.slice(0, 5),
 			priceVerdict: { label: verdictLabel, reasoning },
-			questionsToAsk: questionsToAsk.slice(0, 6)
+			questionsToAsk: questionsToAsk
+				.filter((question, index, all) => all.indexOf(question) === index)
+				.slice(0, 6)
 		};
 	}
 </script>
 
 <!-- Panel container -->
-<div class="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
+<div
+	class="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]"
+>
 	<!-- Top accent bar -->
 	<div class="h-[3px] bg-[var(--color-primary)]"></div>
 
@@ -267,7 +370,7 @@
 		<div class="overflow-hidden">
 			{#if dataState === 'loading'}
 				<!-- Loading skeleton -->
-				<div class="border-t border-[var(--color-border)] px-5 pb-6 pt-5">
+				<div class="border-t border-[var(--color-border)] px-5 pt-5 pb-6">
 					<div class="space-y-8">
 						<div>
 							<Skeleton class="h-3 w-28" />
@@ -303,7 +406,7 @@
 				</div>
 			{:else if dataState === 'error'}
 				<!-- Error state -->
-				<div class="border-t border-[var(--color-border)] px-5 pb-6 pt-5">
+				<div class="border-t border-[var(--color-border)] px-5 pt-5 pb-6">
 					<div class="flex flex-col items-center gap-4 py-6 text-center">
 						<div
 							class="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-signal-above-bg)]"
@@ -331,7 +434,7 @@
 				</div>
 			{:else if dataState === 'ready' && analysis}
 				<!-- Assessment sections -->
-				<div class="border-t border-[var(--color-border)] px-5 pb-6 pt-5">
+				<div class="border-t border-[var(--color-border)] px-5 pt-5 pb-6">
 					<!-- Buyer intent banner -->
 					{#if searchQuery && analysis.buyerIntent}
 						<div
@@ -371,9 +474,7 @@
 								</div>
 							{/each}
 						</div>
-						<p
-							class="mt-4 text-[0.7rem] leading-relaxed text-[var(--color-text-tertiary)] italic"
-						>
+						<p class="mt-4 text-[0.7rem] leading-relaxed text-[var(--color-text-tertiary)] italic">
 							AI-generated analysis — not a vehicle inspection.
 						</p>
 					</section>
@@ -435,7 +536,7 @@
 									class="flex gap-3 text-[0.84rem] leading-[1.65] text-[var(--color-text-secondary)]"
 								>
 									<span
-										class="mt-[0.2em] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--color-secondary)] text-[0.65rem] font-bold tabular-nums text-[var(--color-text-tertiary)]"
+										class="mt-[0.2em] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--color-secondary)] text-[0.65rem] font-bold text-[var(--color-text-tertiary)] tabular-nums"
 									>
 										{i + 1}
 									</span>
@@ -446,7 +547,7 @@
 					</section>
 
 					<!-- Action row -->
-					<div class="mt-8 flex flex-col gap-3 section-reveal" style="animation-delay: 360ms">
+					<div class="section-reveal mt-8 flex flex-col gap-3" style="animation-delay: 360ms">
 						<button
 							onclick={onchatopen}
 							class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-3 text-[0.825rem] font-semibold text-[var(--color-foreground)] transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[var(--color-secondary)] active:scale-[0.98]"

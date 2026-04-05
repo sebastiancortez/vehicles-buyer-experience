@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Listing } from '$lib/types/listing';
+	import { buildVehicleImageFallback, resolveListingPhoto } from '$lib/utils';
 	import SignalBadge from './SignalBadge.svelte';
 	import { Eye, MapPin, Gauge } from 'lucide-svelte';
 
@@ -10,24 +11,8 @@
 
 	let { listing, showWatcherCount = false }: Props = $props();
 
-	const imageFallback = `data:image/svg+xml;utf8,${encodeURIComponent(
-		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-label="Vehicle photo unavailable">
-			<defs>
-				<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-					<stop offset="0%" stop-color="#f2ede4" />
-					<stop offset="100%" stop-color="#d7c4a8" />
-				</linearGradient>
-			</defs>
-			<rect width="960" height="640" fill="url(#bg)" />
-			<rect x="96" y="392" width="768" height="20" rx="10" fill="#b28b52" opacity="0.35" />
-			<path d="M236 374h72l64-126h216l84 32 54 94h32c29 0 54 24 54 54v24H180v-24c0-30 24-54 56-54zm150-92-38 76h334l-31-54-57-22z" fill="#6f5733" opacity="0.9" />
-			<circle cx="318" cy="448" r="54" fill="#2f2c27" />
-			<circle cx="318" cy="448" r="25" fill="#d6d3cc" />
-			<circle cx="666" cy="448" r="54" fill="#2f2c27" />
-			<circle cx="666" cy="448" r="25" fill="#d6d3cc" />
-			<text x="480" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#503f28">Vehicle photo unavailable</text>
-		</svg>`
-	)}`;
+	const imageFallback = $derived(buildVehicleImageFallback(listing));
+	const primaryPhoto = $derived(resolveListingPhoto(listing.photos[0], listing));
 
 	const formatPrice = (n: number) =>
 		new Intl.NumberFormat('en-CA', {
@@ -52,9 +37,12 @@
 	class="group block rounded-2xl bg-[var(--color-surface)] p-2.5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:shadow-[0_8px_32px_-8px_oklch(52%_0.24_264/0.1)] focus-visible:outline-2 focus-visible:outline-offset-4"
 >
 	<!-- Photo -->
-	<div class="relative overflow-hidden rounded-xl bg-[var(--color-secondary)]" style="aspect-ratio: 3/2;">
+	<div
+		class="relative overflow-hidden rounded-xl bg-[var(--color-secondary)]"
+		style="aspect-ratio: 3/2;"
+	>
 		<img
-			src={listing.photos[0] ?? imageFallback}
+			src={primaryPhoto}
 			alt="{listing.year} {listing.make} {listing.model}"
 			class="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
 			loading="lazy"
@@ -103,7 +91,9 @@
 				<Gauge size={12} />
 				{formatMileage(listing.mileage)}
 			</span>
-			<span class="rounded-full bg-[var(--color-secondary)] px-2 py-0.5 text-[0.68rem] font-semibold text-[var(--color-text-secondary)] capitalize">
+			<span
+				class="rounded-full bg-[var(--color-secondary)] px-2 py-0.5 text-[0.68rem] font-semibold text-[var(--color-text-secondary)] capitalize"
+			>
 				{listing.condition}
 			</span>
 			<span class="flex items-center gap-1">

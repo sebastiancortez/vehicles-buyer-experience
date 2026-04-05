@@ -12,7 +12,7 @@
 		Sparkles
 	} from 'lucide-svelte';
 	import type { PageData } from './$types';
-	import type { Condition, SellerType } from '$lib/types/listing';
+	import type { Condition, SellerType, Transmission, Drivetrain } from '$lib/types/listing';
 	import type { SortKey } from './+page.server';
 
 	let { data }: { data: PageData } = $props();
@@ -54,9 +54,7 @@
 
 	function toggleCondition(cond: Condition) {
 		const current = data.filters.condition ?? [];
-		const next = current.includes(cond)
-			? current.filter((c) => c !== cond)
-			: [...current, cond];
+		const next = current.includes(cond) ? current.filter((c) => c !== cond) : [...current, cond];
 		updateParams({ condition: next.length ? next.join(',') : null });
 	}
 
@@ -64,11 +62,28 @@
 		updateParams({ sellerType: type });
 	}
 
+	function setTransmission(type: Transmission | null) {
+		updateParams({ transmission: type });
+	}
+
+	function setDrivetrain(type: Drivetrain | null) {
+		updateParams({ drivetrain: type });
+	}
+
 	function clearAllFilters() {
 		const url = new URL($page.url);
-		['minPrice', 'maxPrice', 'minMileage', 'maxMileage', 'condition', 'sellerType', 'sort', 'page'].forEach((k) =>
-			url.searchParams.delete(k)
-		);
+		[
+			'minPrice',
+			'maxPrice',
+			'minMileage',
+			'maxMileage',
+			'condition',
+			'sellerType',
+			'transmission',
+			'drivetrain',
+			'sort',
+			'page'
+		].forEach((k) => url.searchParams.delete(k));
 		goto(url.toString(), { replaceState: true, noScroll: true });
 	}
 
@@ -90,7 +105,9 @@
 			data.filters.minMileage !== null ||
 			data.filters.maxMileage !== null ||
 			(data.filters.condition !== null && data.filters.condition.length > 0) ||
-			data.filters.sellerType !== null
+			data.filters.sellerType !== null ||
+			data.filters.transmission !== null ||
+			data.filters.drivetrain !== null
 	);
 
 	const activePricePreset = $derived.by(() => {
@@ -132,11 +149,35 @@
 
 	const chips = [
 		'Reliable under $15k',
-		'Low mileage sedans',
 		'Family SUVs',
-		'First car under $10k',
-		'Trucks under $20k'
+		'Manual enthusiast cars',
+		'Exotic weekend cars',
+		'Vintage project cars'
 	];
+
+	const browseChips: {
+		label: string;
+		query: string;
+		transmission?: Transmission;
+		drivetrain?: Drivetrain;
+		condition?: Condition;
+	}[] = [
+		{ label: 'Manual only', query: 'enthusiast', transmission: 'manual' },
+		{ label: 'Modern exotics', query: 'exotic weekend cars' },
+		{ label: 'Vintage icons', query: 'vintage classic' },
+		{ label: 'Project builds', query: 'project cars', condition: 'fair' },
+		{ label: 'AWD heroes', query: 'enthusiast', drivetrain: 'awd' },
+		{ label: 'Overland rigs', query: 'classic 4wd', drivetrain: '4wd' }
+	];
+
+	function browseChipHref(chip: (typeof browseChips)[number]) {
+		const params = new URLSearchParams();
+		params.set('q', chip.query);
+		if (chip.transmission) params.set('transmission', chip.transmission);
+		if (chip.drivetrain) params.set('drivetrain', chip.drivetrain);
+		if (chip.condition) params.set('condition', chip.condition);
+		return `/vehicles?${params.toString()}`;
+	}
 </script>
 
 <svelte:head>
@@ -209,18 +250,35 @@
 				{#if hasActiveFilters}
 					<span
 						class="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[var(--color-primary)] text-[0.6rem] font-bold text-white"
-					>!</span
+						>!</span
 					>
 				{/if}
 			</button>
 		</div>
 	</div>
 
+	<div class="mb-5 flex flex-wrap gap-2">
+		{#each browseChips as chip (chip.label)}
+			<a
+				href={browseChipHref(chip)}
+				class="rounded-full border px-3.5 py-2 text-[0.78rem] font-semibold transition-all duration-200 {data.query ===
+					chip.query &&
+				(!chip.transmission || data.filters.transmission === chip.transmission) &&
+				(!chip.drivetrain || data.filters.drivetrain === chip.drivetrain) &&
+				(!chip.condition || data.filters.condition?.includes(chip.condition))
+					? 'border-[var(--color-primary)] bg-[var(--color-primary-light)] text-[var(--color-primary)]'
+					: 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]'}"
+			>
+				{chip.label}
+			</a>
+		{/each}
+	</div>
+
 	<!-- Main layout: sidebar + grid -->
 	<div class="flex gap-8 pb-16 lg:gap-10">
 		<!-- Filter sidebar -->
 		<aside
-			class="fixed inset-x-0 top-14 z-30 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-[var(--color-border)] bg-[var(--color-background)] px-5 pb-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-6 lg:sticky lg:top-20 lg:z-auto lg:block lg:w-[240px] lg:shrink-0 lg:self-start lg:max-h-[calc(100dvh-5rem)] lg:overflow-y-auto lg:border-none lg:bg-transparent lg:p-0 {filtersOpen
+			class="fixed inset-x-0 top-14 z-30 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-[var(--color-border)] bg-[var(--color-background)] px-5 pb-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-6 lg:sticky lg:top-20 lg:z-auto lg:block lg:max-h-[calc(100dvh-5rem)] lg:w-[240px] lg:shrink-0 lg:self-start lg:overflow-y-auto lg:border-none lg:bg-transparent lg:p-0 {filtersOpen
 				? 'translate-y-0 opacity-100'
 				: 'pointer-events-none -translate-y-2 opacity-0 lg:pointer-events-auto lg:translate-y-0 lg:opacity-100'}"
 		>
@@ -246,17 +304,13 @@
 
 			<!-- Price -->
 			<div class="border-b border-[var(--color-border)]/60 pb-5">
-				<h3 class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase">
+				<h3
+					class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase"
+				>
 					Price
 				</h3>
 				<div class="flex flex-wrap gap-1.5">
-					{#each [
-						{ key: 'any', label: 'Any', min: null, max: null },
-						{ key: '0-10', label: 'Under $10k', min: null, max: 10000 },
-						{ key: '10-20', label: '$10k–20k', min: 10000, max: 20000 },
-						{ key: '20-35', label: '$20k–35k', min: 20000, max: 35000 },
-						{ key: '35+', label: '$35k+', min: 35000, max: null }
-					] as preset (preset.key)}
+					{#each [{ key: 'any', label: 'Any', min: null, max: null }, { key: '0-10', label: 'Under $10k', min: null, max: 10000 }, { key: '10-20', label: '$10k–20k', min: 10000, max: 20000 }, { key: '20-35', label: '$20k–35k', min: 20000, max: 35000 }, { key: '35+', label: '$35k+', min: 35000, max: null }] as preset (preset.key)}
 						<button
 							onclick={() => setPriceRange(preset.min, preset.max)}
 							class="rounded-full px-3 py-1.5 text-[0.725rem] font-semibold transition-all duration-150 {activePricePreset ===
@@ -272,16 +326,13 @@
 
 			<!-- Mileage -->
 			<div class="border-b border-[var(--color-border)]/60 pt-5 pb-5">
-				<h3 class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase">
+				<h3
+					class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase"
+				>
 					Mileage
 				</h3>
 				<div class="flex flex-wrap gap-1.5">
-					{#each [
-						{ key: 'any', label: 'Any', min: null, max: null },
-						{ key: '0-50', label: 'Under 50k', min: null, max: 50000 },
-						{ key: '50-100', label: '50k–100k', min: 50000, max: 100000 },
-						{ key: '100+', label: '100k+', min: 100000, max: null }
-					] as preset (preset.key)}
+					{#each [{ key: 'any', label: 'Any', min: null, max: null }, { key: '0-50', label: 'Under 50k', min: null, max: 50000 }, { key: '50-100', label: '50k–100k', min: 50000, max: 100000 }, { key: '100+', label: '100k+', min: 100000, max: null }] as preset (preset.key)}
 						<button
 							onclick={() => setMileageRange(preset.min, preset.max)}
 							class="rounded-full px-3 py-1.5 text-[0.725rem] font-semibold transition-all duration-150 {activeMileagePreset ===
@@ -297,7 +348,9 @@
 
 			<!-- Condition -->
 			<div class="border-b border-[var(--color-border)]/60 pt-5 pb-5">
-				<h3 class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase">
+				<h3
+					class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase"
+				>
 					Condition
 				</h3>
 				<div class="flex flex-wrap gap-1.5">
@@ -315,17 +368,59 @@
 				</div>
 			</div>
 
+			<!-- Transmission -->
+			<div class="border-b border-[var(--color-border)]/60 pt-5 pb-5">
+				<h3
+					class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase"
+				>
+					Transmission
+				</h3>
+				<div class="flex flex-wrap gap-1.5">
+					{#each [{ value: null, label: 'All' }, { value: 'manual', label: 'Manual' }, { value: 'automatic', label: 'Automatic' }, { value: 'cvt', label: 'CVT' }] as opt (opt.label)}
+						<button
+							onclick={() => setTransmission(opt.value as Transmission | null)}
+							class="rounded-full px-3 py-1.5 text-[0.725rem] font-semibold transition-all duration-150 {data
+								.filters.transmission === opt.value
+								? 'bg-[var(--color-foreground)] text-[var(--color-background)]'
+								: 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)]'}"
+						>
+							{opt.label}
+						</button>
+					{/each}
+				</div>
+			</div>
+
+			<!-- Drivetrain -->
+			<div class="border-b border-[var(--color-border)]/60 pt-5 pb-5">
+				<h3
+					class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase"
+				>
+					Drivetrain
+				</h3>
+				<div class="flex flex-wrap gap-1.5">
+					{#each [{ value: null, label: 'All' }, { value: 'rwd', label: 'RWD' }, { value: 'awd', label: 'AWD' }, { value: '4wd', label: '4WD' }, { value: 'fwd', label: 'FWD' }] as opt (opt.label)}
+						<button
+							onclick={() => setDrivetrain(opt.value as Drivetrain | null)}
+							class="rounded-full px-3 py-1.5 text-[0.725rem] font-semibold transition-all duration-150 {data
+								.filters.drivetrain === opt.value
+								? 'bg-[var(--color-foreground)] text-[var(--color-background)]'
+								: 'bg-[var(--color-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)]'}"
+						>
+							{opt.label}
+						</button>
+					{/each}
+				</div>
+			</div>
+
 			<!-- Seller type -->
 			<div class="pt-5">
-				<h3 class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase">
+				<h3
+					class="mb-3 text-[0.7rem] font-bold tracking-widest text-[var(--color-text-tertiary)] uppercase"
+				>
 					Seller
 				</h3>
 				<div class="flex flex-wrap gap-1.5">
-					{#each [
-						{ value: null, label: 'All' },
-						{ value: 'private', label: 'Private' },
-						{ value: 'dealer', label: 'Dealer' }
-					] as opt (opt.label)}
+					{#each [{ value: null, label: 'All' }, { value: 'private', label: 'Private' }, { value: 'dealer', label: 'Dealer' }] as opt (opt.label)}
 						<button
 							onclick={() => setSellerType(opt.value as SellerType | null)}
 							class="rounded-full px-3 py-1.5 text-[0.725rem] font-semibold transition-all duration-150 {data
@@ -369,10 +464,7 @@
 
 				<!-- Pagination -->
 				{#if data.totalPages > 1}
-					<nav
-						class="mt-10 flex items-center justify-center gap-1"
-						aria-label="Pagination"
-					>
+					<nav class="mt-10 flex items-center justify-center gap-1" aria-label="Pagination">
 						<button
 							onclick={() => goToPage(data.page - 1)}
 							disabled={data.page <= 1}
@@ -413,17 +505,15 @@
 					>
 						<SearchX size={28} class="text-[var(--color-text-tertiary)]" />
 					</div>
-					<h2
-						class="mt-5 text-[1.1rem] font-bold tracking-tight text-[var(--color-foreground)]"
-					>
+					<h2 class="mt-5 text-[1.1rem] font-bold tracking-tight text-[var(--color-foreground)]">
 						No vehicles found
 					</h2>
 					<p
 						class="mt-2 max-w-sm text-[0.875rem] leading-relaxed text-[var(--color-text-secondary)]"
 					>
 						{#if data.query}
-							Nothing matched <strong>"{data.query}"</strong> with your current filters.
-							Try broadening your search or picking a different category.
+							Nothing matched <strong>"{data.query}"</strong> with your current filters. Try broadening
+							your search or picking a different category.
 						{:else}
 							No listings match your current filters. Try removing some filters.
 						{/if}
@@ -439,7 +529,9 @@
 					{/if}
 
 					<div class="mt-8">
-						<p class="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider">
+						<p
+							class="mb-3 text-[0.75rem] font-semibold tracking-wider text-[var(--color-text-tertiary)] uppercase"
+						>
 							Try a popular search
 						</p>
 						<div class="flex flex-wrap justify-center gap-2">
