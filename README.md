@@ -6,7 +6,7 @@ A prototype about building buyer confidence across the vehicle purchase journey.
 
 ## Why this problem
 
-Buying a vehicle online is a $10k-$50k decision, and the tooling is bad. eBay has the inventory and the traffic, but it loses buyers at every stage of the funnel because they don't feel confident enough to commit.
+Buying a vehicle online is a $10k–$50k decision, and buyers treat it like one. eBay has the inventory and the traffic, but buyers still bail because they don't feel sure enough to pull the trigger.
 
 Buyers spend 14+ hours researching before purchasing a vehicle (Cox Automotive). Most of that time is spent reducing anxiety, not browsing inventory. CarGurus got big by doing one thing well: telling buyers whether a price is fair. CarFax and AutoCheck exist because people worry about vehicle history. General marketplaces haven't really addressed any of this.
 
